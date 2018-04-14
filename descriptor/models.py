@@ -12,7 +12,7 @@ class Group(models.Model):
 
 
 class Meeting(models.Model):
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField()
     count_members = models.PositiveSmallIntegerField(null=True)
     count_guests = models.PositiveSmallIntegerField(null=True)
     group = models.ForeignKey(to=Group, on_delete=models.CASCADE, related_name='meetings',

@@ -16,13 +16,16 @@ DATABASES = {
     }
 }
 ```
-Możesz to zrobić za pomocą dockera:
+
+Bazę możesz zainstalować z `https://www.postgresql.org/download/`
+lub spróbować uruchomić ją w kontenerze dockera:
 ```docker run --name biconnect_local_db -e POSTGRES_USER=devDB -e POSTGRES_PASSWORD=devpass --net=host postgres```
+
 4. Uruchom serwer poleceniem:
 ```python
 python manage.py runserver
 ```
 serwer będzie dostępny pod adresem: `localhost:8000`
 
-### II sposób (zautomatyzowany)
+### II sposób (zautomatyzowany) - na Windowsie nie działa
 Uruchom cały projekt zgodnie z instrukcją w https://github.com/gchilczuk/BiConnect

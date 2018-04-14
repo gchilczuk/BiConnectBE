@@ -1,7 +1,12 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework import routers
 
-from descriptor.views import HelloWorld
+from descriptor import views
+
+router = routers.DefaultRouter()
+router.register('people', views.PeopleView)
 
 urlpatterns = [
-    path('hello/', HelloWorld.as_view())
+    path('api/', include(router.urls)),
+    path('hello/', views.HelloWorld.as_view()),
 ]

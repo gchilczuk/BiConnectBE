@@ -3,3 +3,4 @@ djangorestframework==3.7.7
 pylama==7.4.3
 pytest==3.4.2
 psycopg2-binary==2.7.4
+django-rest-swagger==2.1.2

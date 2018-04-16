@@ -28,22 +28,22 @@ class MeetingSerializer(serializers.ModelSerializer):
         fields = ('id', 'date', 'count_members', 'count_guests')
 
 
-class RequirementSerializr(serializers.ModelSerializer):
+class RequirementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Requirement
         fields = ('description', 'appearance_date', 'expiration_date',
                   'fulfilled_positively', 'categories')
 
 
-class RecommendationSerializr(serializers.ModelSerializer):
+class RecommendationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recommendation
         fields = ('description', 'appearance_date', 'expiration_date', 'categories')
 
 
 class SpeechSerializer(serializers.ModelSerializer):
-    requirements = RequirementSerializr(many=True, read_only=True)
-    recommendations = RecommendationSerializr(many=True, read_only=True)
+    requirements = RequirementSerializer(many=True, read_only=True)
+    recommendations = RecommendationSerializer(many=True, read_only=True)
     person = PersonSerializer()
 
     class Meta:
@@ -56,5 +56,5 @@ class MeetingDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Meeting
-        fields = ('id', 'date', 'count_members', 'count_guests', 'group', 'speeches')
-        read_only_fields = ('group', 'speeches')
+        fields = ('id', 'date', 'count_members', 'count_guests', 'speeches')
+        read_only_fields = ('speeches')

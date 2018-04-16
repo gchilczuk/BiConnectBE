@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Person
+from .models import Person, Requirement, Meeting, Speech, Recommendation, Group
 
 
 class PersonSerializer(serializers.ModelSerializer):
@@ -14,3 +14,47 @@ class PersonSerializer(serializers.ModelSerializer):
         fields = ('first_name', 'last_name', 'email',
                   'username', 'member', 'group',
                   'newsletter', 'speech_confirm')
+
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ('id', 'city')
+
+
+class MeetingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Meeting
+        fields = ('id', 'date', 'count_members', 'count_guests')
+
+
+class RequirementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Requirement
+        fields = ('description', 'appearance_date', 'expiration_date',
+                  'fulfilled_positively', 'categories')
+
+
+class RecommendationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Recommendation
+        fields = ('description', 'appearance_date', 'expiration_date', 'categories')
+
+
+class SpeechSerializer(serializers.ModelSerializer):
+    requirements = RequirementSerializer(many=True, read_only=True)
+    recommendations = RecommendationSerializer(many=True, read_only=True)
+    person = PersonSerializer()
+
+    class Meta:
+        model = Speech
+        fields = ('requirements', 'recommendations', 'person', 'date', 'sound_file')
+
+
+class MeetingDetailSerializer(serializers.ModelSerializer):
+    speeches = SpeechSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Meeting
+        fields = ('id', 'date', 'count_members', 'count_guests', 'speeches')
+        read_only_fields = ('speeches')

@@ -1,0 +1,829 @@
+[
+  {
+    "model": "descriptor.group",
+    "pk": 1,
+    "fields": {
+      "city": "Wroc\u0142aw"
+    }
+  },
+    {
+    "model": "descriptor.group",
+    "pk": 2,
+    "fields": {
+      "city": "Opole"
+    }
+  },
+  {
+    "model": "descriptor.meeting",
+    "pk": 1,
+    "fields": {
+      "date": "2018-03-01",
+      "count_members": 4,
+      "count_guests": 2,
+      "group": 1
+    }
+  },
+  {
+    "model": "descriptor.meeting",
+    "pk": 2,
+    "fields": {
+      "date": "2018-03-14",
+      "count_members": 6,
+      "count_guests": 1,
+      "group": 1
+    }
+  },
+  {
+    "model": "descriptor.meeting",
+    "pk": 3,
+    "fields": {
+      "date": "2018-03-25",
+      "count_members": 7,
+      "count_guests": 0,
+      "group": 1
+    }
+  },
+  {
+    "model": "descriptor.meeting",
+    "pk": 4,
+    "fields": {
+      "date": "2018-04-05",
+      "count_members": 4,
+      "count_guests": 1,
+      "group": 1
+    }
+  },
+  {
+    "model": "descriptor.meeting",
+    "pk": 5,
+    "fields": {
+      "date": "2018-04-16",
+      "count_members": 6,
+      "count_guests": 0,
+      "group": 1
+    }
+  },
+  {
+    "model": "descriptor.speech",
+    "pk": 1,
+    "fields": {
+      "person": 1,
+      "meeting": 1,
+      "sound_file": "",
+      "date": "2018-03-01"
+    }
+  },
+  {
+    "model": "descriptor.speech",
+    "pk": 2,
+    "fields": {
+      "person": 2,
+      "meeting": 1,
+      "sound_file": "",
+      "date": "2018-03-01"
+    }
+  },
+  {
+    "model": "descriptor.speech",
+    "pk": 3,
+    "fields": {
+      "person": 3,
+      "meeting": 1,
+      "sound_file": "",
+      "date": "2018-03-01"
+    }
+  },
+  {
+    "model": "descriptor.speech",
+    "pk": 4,
+    "fields": {
+      "person": 4,
+      "meeting": 1,
+      "sound_file": "",
+      "date": "2018-03-01"
+    }
+  },
+  {
+    "model": "descriptor.speech",
+    "pk": 5,
+    "fields": {
+      "person": 4,
+      "meeting": 2,
+      "sound_file": "",
+      "date": "2018-03-14"
+    }
+  },
+  {
+    "model": "descriptor.speech",
+    "pk": 6,
+    "fields": {
+      "person": 3,
+      "meeting": 2,
+      "sound_file": "",
+      "date": "2018-03-14"
+    }
+  },
+  {
+    "model": "descriptor.speech",
+    "pk": 7,
+    "fields": {
+      "person": 1,
+      "meeting": 2,
+      "sound_file": "",
+      "date": "2018-03-14"
+    }
+  },
+  {
+    "model": "descriptor.speech",
+    "pk": 8,
+    "fields": {
+      "person": 1,
+      "meeting": 3,
+      "sound_file": "",
+      "date": "2018-03-25"
+    }
+  },
+  {
+    "model": "descriptor.speech",
+    "pk": 9,
+    "fields": {
+      "person": 2,
+      "meeting": 3,
+      "sound_file": "",
+      "date": "2018-03-25"
+    }
+  },
+  {
+    "model": "descriptor.speech",
+    "pk": 10,
+    "fields": {
+      "person": 3,
+      "meeting": 3,
+      "sound_file": "",
+      "date": "2018-03-25"
+    }
+  },
+  {
+    "model": "descriptor.speech",
+    "pk": 11,
+    "fields": {
+      "person": 2,
+      "meeting": 2,
+      "sound_file": "",
+      "date": "2018-03-14"
+    }
+  },
+  {
+    "model": "descriptor.requirement",
+    "pk": 1,
+    "fields": {
+      "speech": 1,
+      "description": "Potrzebuj\u0119 ogrodnika",
+      "appearance_date": "2018-03-01",
+      "expiration_date": null,
+      "fulfilled_positively": false,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.requirement",
+    "pk": 2,
+    "fields": {
+      "speech": 2,
+      "description": "Porzebuj\u0119 dobrego hydraulika",
+      "appearance_date": "2018-03-01",
+      "expiration_date": null,
+      "fulfilled_positively": false,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.requirement",
+    "pk": 3,
+    "fields": {
+      "speech": 3,
+      "description": "Potrzebna jest mi pomoc w doborze szkole\u0144",
+      "appearance_date": "2018-03-01",
+      "expiration_date": null,
+      "fulfilled_positively": false,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.requirement",
+    "pk": 4,
+    "fields": {
+      "speech": 4,
+      "description": "Potrzebuj\u0119 kontaktu do specjalisty w dziedzinie finans\u00f3w",
+      "appearance_date": "2018-03-01",
+      "expiration_date": null,
+      "fulfilled_positively": false,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.requirement",
+    "pk": 5,
+    "fields": {
+      "speech": 5,
+      "description": "Potrzebuj\u0119 poready w sprawie zakupu dzia\u0142ki",
+      "appearance_date": "2018-03-14",
+      "expiration_date": null,
+      "fulfilled_positively": true,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.requirement",
+    "pk": 6,
+    "fields": {
+      "speech": 6,
+      "description": "Potrzebuj\u0119 porady w sprawie zatrudnienia nowych pracownik\u00f3w",
+      "appearance_date": "2018-03-14",
+      "expiration_date": null,
+      "fulfilled_positively": false,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.requirement",
+    "pk": 7,
+    "fields": {
+      "speech": 7,
+      "description": "Potrzebuj\u0119 specjalisty od Vue.js",
+      "appearance_date": "2018-03-14",
+      "expiration_date": null,
+      "fulfilled_positively": false,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.requirement",
+    "pk": 8,
+    "fields": {
+      "speech": 8,
+      "description": "Potrzebuj\u0119 dobrego biura rachunkowego",
+      "appearance_date": "2018-03-14",
+      "expiration_date": null,
+      "fulfilled_positively": true,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.requirement",
+    "pk": 9,
+    "fields": {
+      "speech": 9,
+      "description": "Potrzebuj\u0119 nowej ksi\u0119gowej",
+      "appearance_date": "2018-03-25",
+      "expiration_date": null,
+      "fulfilled_positively": false,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.requirement",
+    "pk": 10,
+    "fields": {
+      "speech": 10,
+      "description": "Potrzebuj\u0119 zam\u00f3wi\u0107 artyku\u0142y biurowe w dobrej cenie",
+      "appearance_date": "2018-03-25",
+      "expiration_date": null,
+      "fulfilled_positively": false,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.requirement",
+    "pk": 11,
+    "fields": {
+      "speech": 2,
+      "description": "Potrzebuj\u0119 specjalisty od marketingu",
+      "appearance_date": "2018-03-01",
+      "expiration_date": null,
+      "fulfilled_positively": true,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.requirement",
+    "pk": 12,
+    "fields": {
+      "speech": 3,
+      "description": "Potrzebna jest mi firma cateringowa",
+      "appearance_date": "2018-03-01",
+      "expiration_date": null,
+      "fulfilled_positively": false,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.requirement",
+    "pk": 13,
+    "fields": {
+      "speech": 1,
+      "description": "Szukam informacji na temat technik relaksacyjnych",
+      "appearance_date": "2018-03-01",
+      "expiration_date": null,
+      "fulfilled_positively": false,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.requirement",
+    "pk": 14,
+    "fields": {
+      "speech": 3,
+      "description": "Szukam specjalisty w dziedzinie sprz\u0119tu audio",
+      "appearance_date": "2018-03-01",
+      "expiration_date": null,
+      "fulfilled_positively": true,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.requirement",
+    "pk": 15,
+    "fields": {
+      "speech": 4,
+      "description": "Poszukuj\u0119 dobrej firmy sprz\u0105taj\u0105cej",
+      "appearance_date": "2018-03-01",
+      "expiration_date": null,
+      "fulfilled_positively": true,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.recommendation",
+    "pk": 1,
+    "fields": {
+      "speech": 1,
+      "description": "Polecam m\u00f3j sklep z rowerami",
+      "appearance_date": "2018-03-01",
+      "expiration_date": null,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.recommendation",
+    "pk": 2,
+    "fields": {
+      "speech": 2,
+      "description": "Polecam zainteresowa\u0107 si\u0119 ofert\u0105 firmy XYZ",
+      "appearance_date": "2018-03-01",
+      "expiration_date": null,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.recommendation",
+    "pk": 3,
+    "fields": {
+      "speech": 3,
+      "description": "Rekomenduj\u0119 najnowsz\u0105 sztuk\u0119 w Teatrze Wielkim",
+      "appearance_date": "2018-03-01",
+      "expiration_date": null,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.recommendation",
+    "pk": 4,
+    "fields": {
+      "speech": 4,
+      "description": "Polecam firm\u0119 ABC, pomogli mi w moim problemie z ogrodem firmowym",
+      "appearance_date": "2018-03-01",
+      "expiration_date": null,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.recommendation",
+    "pk": 5,
+    "fields": {
+      "speech": 5,
+      "description": "Polecam ksi\u0105\u017ck\u0119 o istocie technik relaksacyjnych podczas prowadzenia firmy",
+      "appearance_date": "2018-03-14",
+      "expiration_date": null,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.recommendation",
+    "pk": 6,
+    "fields": {
+      "speech": 6,
+      "description": "Polecam kurs X dotycz\u0105cy zarz\u0105dzania czasem",
+      "appearance_date": "2018-03-14",
+      "expiration_date": null,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.recommendation",
+    "pk": 7,
+    "fields": {
+      "speech": 7,
+      "description": "Rekomenduj\u0119 firm\u0119 K - producenta artyku\u0142\u00f3w biurowych",
+      "appearance_date": "2018-03-14",
+      "expiration_date": null,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.recommendation",
+    "pk": 8,
+    "fields": {
+      "speech": 8,
+      "description": "Polecam firm\u0119 A",
+      "appearance_date": "2018-03-14",
+      "expiration_date": null,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.recommendation",
+    "pk": 9,
+    "fields": {
+      "speech": 9,
+      "description": "Polecam firm\u0119 cateringow\u0105 BBB",
+      "appearance_date": "2018-03-25",
+      "expiration_date": null,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.recommendation",
+    "pk": 10,
+    "fields": {
+      "speech": 10,
+      "description": "Polecam us\u0142ugi hydrauliczne firmy H",
+      "appearance_date": "2018-03-25",
+      "expiration_date": null,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.recommendation",
+    "pk": 11,
+    "fields": {
+      "speech": 2,
+      "description": "Polecam kurs wyplatania koszyk\u00f3w z wikliny",
+      "appearance_date": "2018-03-01",
+      "expiration_date": null,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.recommendation",
+    "pk": 12,
+    "fields": {
+      "speech": 3,
+      "description": "Polecam kurs technik pami\u0119ci",
+      "appearance_date": "2018-03-01",
+      "expiration_date": null,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.recommendation",
+    "pk": 13,
+    "fields": {
+      "speech": 1,
+      "description": "Polecam firm\u0119 sprz\u0105taj\u0105c\u0105 S",
+      "appearance_date": "2018-03-01",
+      "expiration_date": null,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.recommendation",
+    "pk": 14,
+    "fields": {
+      "speech": 3,
+      "description": "Rekomenduj\u0119 biuro rachunkowe BR",
+      "appearance_date": "2018-03-01",
+      "expiration_date": null,
+      "categories": []
+    }
+  },
+  {
+    "model": "descriptor.recommendation",
+    "pk": 15,
+    "fields": {
+      "speech": 4,
+      "description": "Polecam pana A.B. jako sprcjalist\u0119 w bran\u017cy B",
+      "appearance_date": "2018-03-01",
+      "expiration_date": null,
+      "categories": []
+    }
+  },
+    {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pass1",
+      "last_login": null,
+      "is_superuser": true,
+      "username": "user1",
+      "first_name": "Jan",
+      "last_name": "Kowalski",
+      "email": "jkmail@mail.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2004-10-19T08:23:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "password": "pass2",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "user2",
+      "first_name": "Jan",
+      "last_name": "Nowak",
+      "email": "jnmail@mail.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2004-10-19T08:23:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+      "password": "pass3",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "user3",
+      "first_name": "Anna",
+      "last_name": "Maczek",
+      "email": "ammail@mail.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2004-10-19T08:23:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 4,
+    "fields": {
+      "password": "pass4",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "user4",
+      "first_name": "Katarzyna",
+      "last_name": "Wielka",
+      "email": "kwmail@mail.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2004-10-19T08:23:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 5,
+    "fields": {
+      "password": "pass5",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "user5",
+      "first_name": "Edward",
+      "last_name": "Kowalski",
+      "email": "ekmail@mail.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2004-10-19T08:23:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 6,
+    "fields": {
+      "password": "pass6",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "user6",
+      "first_name": "Cyprian",
+      "last_name": "Fio\u0142ek",
+      "email": "cfmail@mail.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2004-10-19T08:23:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 7,
+    "fields": {
+      "password": "pass7",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "user7",
+      "first_name": "Zofia",
+      "last_name": "Antosik",
+      "email": "zamail@mail.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2004-10-19T08:23:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 8,
+    "fields": {
+      "password": "pass8",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "user8",
+      "first_name": "Marianna",
+      "last_name": "Stefczyk",
+      "email": "msmail@mail.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2004-10-19T08:23:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 9,
+    "fields": {
+      "password": "pass9",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "user9",
+      "first_name": "Tomasz",
+      "last_name": "Sobolewski",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2004-10-19T08:23:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 10,
+    "fields": {
+      "password": "pass10",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "user10",
+      "first_name": "Nikodem",
+      "last_name": "Maria\u0144ski",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2004-10-19T08:23:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 11,
+    "fields": {
+      "password": "pass11",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "user11",
+      "first_name": "Gustaw",
+      "last_name": "Konrad",
+      "email": "gkmail@mail.com",
+      "is_staff": false,
+      "is_active": false,
+      "date_joined": "2004-10-19T08:23:54Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "descriptor.person",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "group": 1,
+      "member": true,
+      "newsletter": true,
+      "speech_confirm": true
+    }
+  },
+  {
+    "model": "descriptor.person",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "group": 1,
+      "member": true,
+      "newsletter": true,
+      "speech_confirm": true
+    }
+  },
+  {
+    "model": "descriptor.person",
+    "pk": 3,
+    "fields": {
+      "user": 3,
+      "group": 1,
+      "member": true,
+      "newsletter": false,
+      "speech_confirm": false
+    }
+  },
+  {
+    "model": "descriptor.person",
+    "pk": 4,
+    "fields": {
+      "user": 4,
+      "group": 1,
+      "member": true,
+      "newsletter": true,
+      "speech_confirm": true
+    }
+  },
+  {
+    "model": "descriptor.person",
+    "pk": 5,
+    "fields": {
+      "user": 5,
+      "group": 1,
+      "member": true,
+      "newsletter": false,
+      "speech_confirm": true
+    }
+  },
+  {
+    "model": "descriptor.person",
+    "pk": 6,
+    "fields": {
+      "user": 6,
+      "group": 1,
+      "member": true,
+      "newsletter": true,
+      "speech_confirm": true
+    }
+  },
+  {
+    "model": "descriptor.person",
+    "pk": 7,
+    "fields": {
+      "user": 7,
+      "group": 1,
+      "member": true,
+      "newsletter": true,
+      "speech_confirm": true
+    }
+  },
+  {
+    "model": "descriptor.person",
+    "pk": 8,
+    "fields": {
+      "user": 8,
+      "group": 1,
+      "member": true,
+      "newsletter": true,
+      "speech_confirm": true
+    }
+  },
+  {
+    "model": "descriptor.person",
+    "pk": 9,
+    "fields": {
+      "user": 9,
+      "group": 1,
+      "member": false,
+      "newsletter": false,
+      "speech_confirm": false
+    }
+  },
+  {
+    "model": "descriptor.person",
+    "pk": 10,
+    "fields": {
+      "user": 10,
+      "group": 1,
+      "member": false,
+      "newsletter": false,
+      "speech_confirm": false
+    }
+  }
+]

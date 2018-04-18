@@ -4,8 +4,9 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet, ModelViewSet
 from rest_framework_extensions.mixins import DetailSerializerMixin
 
-from descriptor.models import Person, Meeting, Group
-from descriptor.serializers import PersonSerializer, MeetingSerializer, GroupSerializer, MeetingDetailSerializer
+from descriptor.models import Person, Meeting, Group, Speech
+from descriptor.serializers import PersonSerializer, MeetingSerializer, GroupSerializer, MeetingDetailSerializer, \
+    SpeechSerializer
 
 
 class HelloWorld(APIView):
@@ -49,3 +50,11 @@ class MeetingViewSet(DetailSerializerMixin, ModelViewSet):
             meeting = self.get_queryset().create(**serializer.validated_data,
                                                  group_id=self.kwargs['parent_lookup_group'])
             return Response(self.serializer_class(meeting).data)
+
+
+class SpeechViewSet(ModelViewSet):
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = SpeechSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        return Speech.objects.filter(meeting_id=self.kwargs['parent_lookup_meeting'])

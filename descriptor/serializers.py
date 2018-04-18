@@ -48,7 +48,7 @@ class SpeechSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Speech
-        fields = ('requirements', 'recommendations', 'person', 'date', 'sound_file')
+        fields = ('id', 'requirements', 'recommendations', 'person', 'date', 'sound_file')
 
 
 class MeetingDetailSerializer(serializers.ModelSerializer):

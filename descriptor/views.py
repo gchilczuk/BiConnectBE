@@ -6,7 +6,7 @@ from rest_framework_extensions.mixins import DetailSerializerMixin
 
 from descriptor.models import Person, Meeting, Group, Speech
 from descriptor.serializers import PersonSerializer, MeetingSerializer, GroupSerializer, MeetingDetailSerializer, \
-    SpeechSerializer
+    SpeechSerializer, RequirementSerializer, RecommendationSerializer
 
 
 class HelloWorld(APIView):
@@ -58,3 +58,13 @@ class SpeechViewSet(ModelViewSet):
 
     def get_queryset(self, *args, **kwargs):
         return Speech.objects.filter(meeting_id=self.kwargs['parent_lookup_meeting'])
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        serializer_req = RequirementSerializer
+        serializer_rec = RecommendationSerializer
+        if serializer.is_valid():
+            speech = self.get_queryset().create(**serializer.validated_data,
+                                                meeting_id=self.kwargs['parent_lookup_meeting'])
+
+            return Response(self.serializer_class(speech).data)

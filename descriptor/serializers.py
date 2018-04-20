@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Person, Requirement, Meeting, Speech, Recommendation, Group
+from .models import Person, Requirement, Meeting, Speech, Recommendation, Group, Category
 
 
 class PersonSerializer(serializers.ModelSerializer):
@@ -11,9 +11,15 @@ class PersonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Person
-        fields = ('first_name', 'last_name', 'email',
+        fields = ('id', 'first_name', 'last_name', 'email',
                   'username', 'member', 'group',
                   'newsletter', 'speech_confirm')
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ('name',)
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -29,16 +35,20 @@ class MeetingSerializer(serializers.ModelSerializer):
 
 
 class RequirementSerializer(serializers.ModelSerializer):
+    categories = CategorySerializer(many=True, read_only=True)
+
     class Meta:
         model = Requirement
-        fields = ('description', 'appearance_date', 'expiration_date',
+        fields = ('id', 'description', 'appearance_date', 'expiration_date',
                   'fulfilled_positively', 'categories')
 
 
 class RecommendationSerializer(serializers.ModelSerializer):
+    categories = CategorySerializer(many=True, read_only=True)
+
     class Meta:
         model = Recommendation
-        fields = ('description', 'appearance_date', 'expiration_date', 'categories')
+        fields = ('id', 'description', 'appearance_date', 'expiration_date', 'categories')
 
 
 class SpeechSerializer(serializers.ModelSerializer):
@@ -49,6 +59,7 @@ class SpeechSerializer(serializers.ModelSerializer):
     class Meta:
         model = Speech
         fields = ('id', 'requirements', 'recommendations', 'person', 'date', 'sound_file')
+        read_only_fields = ('id', 'date')
 
 
 class MeetingDetailSerializer(serializers.ModelSerializer):
@@ -58,3 +69,4 @@ class MeetingDetailSerializer(serializers.ModelSerializer):
         model = Meeting
         fields = ('id', 'date', 'count_members', 'count_guests', 'speeches')
         read_only_fields = ('speeches',)
+

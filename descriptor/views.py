@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -60,11 +61,27 @@ class SpeechViewSet(ModelViewSet):
         return Speech.objects.filter(meeting_id=self.kwargs['parent_lookup_meeting'])
 
     def create(self, request, *args, **kwargs):
+        speech = self.get_queryset().create(meeting_id=self.kwargs['parent_lookup_meeting'])
+        return Response(self.serializer_class(speech).data)
+
+    def update(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
         serializer = self.serializer_class(data=request.data)
-        serializer_req = RequirementSerializer
-        serializer_rec = RecommendationSerializer
-        if serializer.is_valid():
-            speech = self.get_queryset().create(**serializer.validated_data,
-                                                meeting_id=self.kwargs['parent_lookup_meeting'])
+        serializer_req = RequirementSerializer(data=request.data.get('requirements'), many=True)
+        serializer_rec = RecommendationSerializer(data=request.data.get('recommendations'), many=True)
+
+        if serializer.is_valid(raise_exception=True) and serializer_rec.is_valid(raise_exception=True) and serializer_req.is_valid(raise_exception=True):
+            speech = self.get_queryset().get(pk=pk)
+            a = serializer.validated_data.get('person')
+            print(request.data.get('person').get('id'), serializer.validated_data.get('person'))
+            person = Person.objects.get(id=a.get('id'))
+            print(person)
+            speech.person = person
+            # speech.save()
+            rec = speech.recommendations.all()
+            req = speech.requirements.all()
+
+
 
             return Response(self.serializer_class(speech).data)
+

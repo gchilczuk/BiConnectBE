@@ -24,7 +24,7 @@ class Meeting(models.Model):
 
 class Speech(models.Model):
     person = models.ForeignKey(to='Person', on_delete=models.CASCADE, related_name='speeches',
-                               related_query_name='speech')
+                               related_query_name='speech', null=True)
     meeting = models.ForeignKey(to=Meeting, on_delete=models.CASCADE, related_name='speeches',
                                 related_query_name='speech', null=True)
     sound_file = models.FileField(upload_to=sound_file_path, max_length=255, null=True)
@@ -44,6 +44,9 @@ class Person(models.Model):
 
     class Meta:
         db_table = 'people'
+
+    def __repr__(self):
+        return f'{self.id}, {self.user.first_name} {self.user.last_name}'
 
 
 class Requirement(models.Model):

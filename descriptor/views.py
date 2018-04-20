@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet, ModelViewSet
 from rest_framework_extensions.mixins import DetailSerializerMixin
 
-from descriptor.models import Person, Meeting, Group, Speech
+from descriptor.models import Person, Meeting, Group, Speech, Requirement
 from descriptor.serializers import PersonSerializer, MeetingSerializer, GroupSerializer, MeetingDetailSerializer, \
     SpeechSerializer, RequirementSerializer, RecommendationSerializer
 
@@ -67,21 +67,20 @@ class SpeechViewSet(ModelViewSet):
     def update(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
         serializer = self.serializer_class(data=request.data)
-        serializer_req = RequirementSerializer(data=request.data.get('requirements'), many=True)
+        serializer_req = RequirementSerializer(Requirement.objects.filter(speech_id=kwargs.get('pk')), data=request.data.get('requirements'), many=True)
         serializer_rec = RecommendationSerializer(data=request.data.get('recommendations'), many=True)
 
-        if serializer.is_valid(raise_exception=True) and serializer_rec.is_valid(raise_exception=True) and serializer_req.is_valid(raise_exception=True):
-            speech = self.get_queryset().get(pk=pk)
-            a = serializer.validated_data.get('person')
-            print(request.data.get('person').get('id'), serializer.validated_data.get('person'))
-            person = Person.objects.get(id=a.get('id'))
-            print(person)
-            speech.person = person
-            # speech.save()
-            rec = speech.recommendations.all()
-            req = speech.requirements.all()
 
+        if (serializer.is_valid(raise_exception=True)
+                and serializer_rec.is_valid(raise_exception=True)
+                and serializer_req.is_valid(raise_exception=True)):
+            serializer_req.save()
 
+            # speech = serializer.save(kwargs.get('pk'))
 
-            return Response(self.serializer_class(speech).data)
+            # rec = speech.recommendations.all()
+            # req = speech.requirements.all()
 
+            # return Response(self.serializer_class(speech).data)
+
+        return HttpResponse("Elo")

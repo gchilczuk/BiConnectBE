@@ -1,15 +1,16 @@
+from django.db import transaction
 from django.http import HttpResponse
-from django.utils.encoding import smart_str
 from rest_framework import permissions
+from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet, ModelViewSet
 from rest_framework_extensions.mixins import DetailSerializerMixin
-from rest_framework.decorators import action
 
-from descriptor.models import Person, Meeting, Group
-from descriptor.serializers import PersonSerializer, MeetingSerializer, GroupSerializer, MeetingDetailSerializer
+from descriptor.models import Person, Meeting, Group, Speech, Requirement, Recommendation
+from descriptor.serializers import PersonSerializer, MeetingSerializer, GroupSerializer, MeetingDetailSerializer, \
+    SpeechSerializer, RequirementSerializer, RecommendationSerializer
 from descriptor.utils import Note
 
 
@@ -50,7 +51,7 @@ class MeetingViewSet(DetailSerializerMixin, ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             meeting = self.get_queryset().create(**serializer.validated_data,
                                                  group_id=self.kwargs['parent_lookup_group'])
             return Response(self.serializer_class(meeting).data)
@@ -66,3 +67,37 @@ class MeetingViewSet(DetailSerializerMixin, ModelViewSet):
         response = HttpResponse(open(file_path, 'rb').read(), content_type='application/force-download')
         response['Content-Disposition'] = 'attachment; filename="notatka.txt"'
         return response
+
+
+class SpeechViewSet(ModelViewSet):
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = SpeechSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        return Speech.objects.filter(meeting_id=self.kwargs['parent_lookup_meeting'])
+
+    def create(self, request, *args, **kwargs):
+        speech = self.get_queryset().create(meeting_id=self.kwargs['parent_lookup_meeting'])
+        return Response(self.serializer_class(speech).data)
+
+    def update(self, request, *args, **kwargs):
+        speech_id = kwargs.get('pk')
+        serializer = self.serializer_class(data=request.data)
+        serializer_req = RequirementSerializer(data=request.data.get('requirements'), many=True)
+        serializer_rec = RecommendationSerializer(data=request.data.get('recommendations'), many=True)
+
+        if (serializer.is_valid(raise_exception=True)
+                and serializer_rec.is_valid(raise_exception=True)
+                and serializer_req.is_valid(raise_exception=True)):
+            with transaction.atomic():
+                try:
+                    serializer.save(speech_id)
+                except Speech.DoesNotExist:
+                    raise NotFound("No such speech")
+
+                serializer_req.update(Requirement.objects.filter(speech_id=speech_id),
+                                      serializer_req.validated_data, speech_id=speech_id)
+                serializer_rec.update(Recommendation.objects.filter(speech_id=speech_id),
+                                      serializer_rec.validated_data, speech_id=speech_id)
+
+        return Response(self.serializer_class(Speech.objects.get(pk=speech_id)).data)

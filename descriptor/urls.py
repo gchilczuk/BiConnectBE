@@ -7,7 +7,9 @@ router = ExtendedSimpleRouter(trailing_slash=False)
 router.register(r'people', views.PeopleViewSet)
 router.register(r'groups', views.GroupViewSet, base_name='group') \
     .register(r'meetings', views.MeetingViewSet,
-              base_name='group-meeting', parents_query_lookups=['group'])
+              base_name='group-meeting', parents_query_lookups=['group']) \
+    .register(r'speeches', views.SpeechViewSet,
+              base_name='group-meeting-speech', parents_query_lookups=['group', 'meeting'])
 
 urlpatterns = [
     path('', include(router.urls)),

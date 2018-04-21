@@ -1,3 +1,5 @@
+from django.http import HttpResponse
+from django.utils.encoding import smart_str
 from rest_framework import permissions
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
@@ -56,7 +58,11 @@ class MeetingViewSet(DetailSerializerMixin, ModelViewSet):
     @action(detail=True)
     def note(self, request, **kwargs):
         try:
-            meeting = self.get_queryset().get(kwargs.get('pk'))
+            meeting = self.get_queryset().get(pk=kwargs.get('pk'))
         except Meeting.DoesNotExist:
             raise NotFound('There is no meeting with such id in this group')
-        return Response(Note(meeting).generate())
+        note = Note(meeting)
+        file_path = note.generate_txt()
+        response = HttpResponse(open(file_path, 'rb').read(), content_type='application/force-download')
+        response['Content-Disposition'] = 'attachment; filename="notatka.txt"'
+        return response

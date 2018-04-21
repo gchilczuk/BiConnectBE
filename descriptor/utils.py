@@ -1,4 +1,8 @@
+import os
 from django.utils.datetime_safe import datetime
+
+from BiConnect.settings import STATIC_ROOT
+
 
 def sound_file_path(instance, filename):
     """
@@ -22,8 +26,9 @@ class Note(object):
 
     def __init__(self, meeting):
         self.meeting = meeting
+        self.dir = STATIC_ROOT + f'{self.meeting.group.id}/'
 
-    def generate(self):
+    def generate_json(self):
         requirements = []
         recommendations = []
         for speech in self.meeting.speeches.get_queryset():
@@ -40,3 +45,27 @@ class Note(object):
             'requirements': [{'description': req.description, 'person': str(person)} for req, person in requirements],
             'recommendations': [{'description': rec.description, 'person': str(person)} for rec, person in requirements]
         }
+
+    def generate_txt(self):
+        json = self.generate_json()
+        self.create_dir()
+        file_path = self.dir + f'{self.meeting.id}'
+        with open(file_path, 'w') as file:
+            file.write(json['header'] + '\n')
+            file.write('\n')
+            file.write(json['summary'] + '\n')
+            file.write('\n')
+            for req in json['requirements']:
+                file.write(req['description'] + '\n')
+                file.write(req['person'] + '\n')
+                file.write('\n')
+            for req in json['recommendations']:
+                file.write(req['description'] + '\n')
+                file.write(req['person'] + '\n')
+                file.write('\n')
+
+        return file_path
+
+    def create_dir(self):
+        if not os.path.exists(self.dir):
+            os.makedirs(self.dir)

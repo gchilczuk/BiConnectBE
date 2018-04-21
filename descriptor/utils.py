@@ -55,10 +55,14 @@ class Note(object):
             file.write('\n')
             file.write(json['summary'] + '\n')
             file.write('\n')
+            file.write('\n')
+            file.write('Zgłoszone potrzeby:\n')
             for req in json['requirements']:
                 file.write(req['description'] + '\n')
                 file.write(req['person'] + '\n')
                 file.write('\n')
+            file.write('\n')
+            file.write('Zgłoszone rekomendacje:\n')
             for req in json['recommendations']:
                 file.write(req['description'] + '\n')
                 file.write(req['person'] + '\n')

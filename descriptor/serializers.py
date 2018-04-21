@@ -50,14 +50,17 @@ class RequirementListSerializer(serializers.ListSerializer):
     def update(self, instance, validated_data, **kwargs):
         updated_ids = []
         for newreq in validated_data:
-            id = newreq.pop('id')
-            updated_ids.append(id)
-            try:
-                req, created = instance.get_or_create(id=id, speech_id=kwargs['speech_id'], defaults=newreq)
-            except IntegrityError:
-                raise ParseError("You cannot reassign Requirement to another speech.")
+            id = newreq.pop('id', None)
 
-            if not created:
+            if id is None:
+                instance.create(speech_id=kwargs['speech_id'], **newreq)
+
+            else:
+                try:
+                    req = instance.get(id=id, speech_id=kwargs['speech_id'])
+                except IntegrityError:
+                    raise ParseError("You cannot reassign Requirement to another speech.")
+                updated_ids.append(id)
                 req.description = newreq['description']
                 req.save()
 
@@ -68,7 +71,7 @@ class RequirementListSerializer(serializers.ListSerializer):
 
 class RequirementSerializer(serializers.ModelSerializer):
     categories = CategorySerializer(many=True, read_only=True)
-    id = serializers.IntegerField()
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         model = Requirement
@@ -81,15 +84,17 @@ class RecommendationListSerializer(serializers.ListSerializer):
     def update(self, instance, validated_data, **kwargs):
         updated_ids = []
         for newrecom in validated_data:
-            id = newrecom.pop('id')
-            updated_ids.append(id)
-            try:
-                recom, created = instance.get_or_create(id=id, speech_id=kwargs['speech_id'],
-                                                        defaults=newrecom)
-            except IntegrityError:
-                raise ParseError("You cannot reassign Recommendation to another speech.")
+            id = newrecom.pop('id', None)
 
-            if not created:
+            if id is None:
+                instance.create(speech_id=kwargs['speech_id'], **newrecom)
+
+            else:
+                try:
+                    recom = instance.get(id=id, speech_id=kwargs['speech_id'])
+                except IntegrityError:
+                    raise ParseError("You cannot reassign Recommendation to another speech.")
+                updated_ids.append(id)
                 recom.description = newrecom['description']
                 recom.save()
 
@@ -100,7 +105,7 @@ class RecommendationListSerializer(serializers.ListSerializer):
 
 class RecommendationSerializer(serializers.ModelSerializer):
     categories = CategorySerializer(many=True, read_only=True)
-    id = serializers.IntegerField()
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         model = Recommendation

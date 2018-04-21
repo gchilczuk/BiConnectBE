@@ -1,0 +1,1 @@
+web: gunicorn --env DJANGO_SETTINGS_MODULE=BiConnect.settings BiConnect.wsgi --log-file -

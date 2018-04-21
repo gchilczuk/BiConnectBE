@@ -76,10 +76,10 @@ WSGI_APPLICATION = 'BiConnect.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'devDB',
-        'USER': 'devDB',
-        'PASSWORD': 'devpass',
-        'HOST': '127.0.0.1',
+        'NAME': 'da6hpdsc870f5m',
+        'USER': 'zrisdruenfdovv',
+        'PASSWORD': '1cc58015e2eb75eb0ff0d3207594052f0553622519316cad53c9654e9ed83352',
+        'HOST': 'ec2-54-247-95-125.eu-west-1.compute.amazonaws.com',
         'PORT': '5432',
     }
 }

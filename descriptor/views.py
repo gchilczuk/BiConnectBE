@@ -45,7 +45,7 @@ class MeetingViewSet(DetailSerializerMixin, ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             meeting = self.get_queryset().create(**serializer.validated_data,
                                                  group_id=self.kwargs['parent_lookup_group'])
             return Response(self.serializer_class(meeting).data)

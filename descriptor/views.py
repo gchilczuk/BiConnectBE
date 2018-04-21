@@ -1,5 +1,6 @@
 from django.db import transaction
 from rest_framework import permissions
+from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -85,4 +86,16 @@ class SpeechViewSet(ModelViewSet):
                 serializer_rec.update(Recommendation.objects.filter(speech_id=speech_id),
                                       serializer_rec.validated_data, speech_id=speech_id)
 
-        return Response(self.serializer_class(Speech.objects.get(pk=speech_id)).data)
+            return Response(self.serializer_class(Speech.objects.get(pk=speech_id)).data)
+
+    @action(methods=['put', 'get'], detail=True)
+    def requirements(self, request, *args, **kwargs):
+        speech_id = kwargs.get('pk')
+        queryset = Requirement.objects.filter(speech_id=speech_id)
+
+        if request.data:
+            serializer = RequirementSerializer(data=request.data, many=True)
+            if serializer.is_valid(raise_exception=True):
+                serializer.update(queryset, serializer.validated_data, speech_id=speech_id)
+
+        return Response(RequirementSerializer(queryset, many=True).data)

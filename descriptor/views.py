@@ -1,5 +1,7 @@
+from django.db import transaction
 from django.http import HttpResponse
 from rest_framework import permissions
+from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet, ModelViewSet
@@ -73,17 +75,15 @@ class SpeechViewSet(ModelViewSet):
         if (serializer.is_valid(raise_exception=True)
                 and serializer_rec.is_valid(raise_exception=True)
                 and serializer_req.is_valid(raise_exception=True)):
-            serializer.save(speech_id)
-            serializer_req.update(Requirement.objects.filter(speech_id=speech_id),
-                                  serializer_req.validated_data, speech_id=speech_id)
-            serializer_rec.update(Recommendation.objects.filter(speech_id=speech_id),
-                                  serializer_rec.validated_data, speech_id=speech_id)
+            with transaction.atomic():
+                try:
+                    serializer.save(speech_id)
+                except Speech.DoesNotExist:
+                    raise NotFound("No such speech")
 
-            # speech = serializer.save(kwargs.get('pk'))
-
-            # rec = speech.recommendations.all()
-            # req = speech.requirements.all()
-
-            # return Response(self.serializer_class(speech).data)
+                serializer_req.update(Requirement.objects.filter(speech_id=speech_id),
+                                      serializer_req.validated_data, speech_id=speech_id)
+                serializer_rec.update(Recommendation.objects.filter(speech_id=speech_id),
+                                      serializer_rec.validated_data, speech_id=speech_id)
 
         return Response(self.serializer_class(Speech.objects.get(pk=speech_id)).data)

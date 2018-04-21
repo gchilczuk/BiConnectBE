@@ -50,7 +50,6 @@ class MeetingSerializer(serializers.ModelSerializer):
 
 class RequirementListSerializer(serializers.ListSerializer):
     def update(self, instance, validated_data, **kwargs):
-        print(kwargs.get('dupa', 'brak'))
         updated_ids = []
         for newreq in validated_data:
             updated_ids.append(newreq.get('id'))

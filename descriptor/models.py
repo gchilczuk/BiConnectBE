@@ -45,6 +45,9 @@ class Person(models.Model):
     class Meta:
         db_table = 'people'
 
+    def __str__(self):
+        return f'{self.user.first_name} {self.user.last_name}, {self.user.email}'
+
 
 class Requirement(models.Model):
     speech = models.ForeignKey(to=Speech, on_delete=models.CASCADE, related_name='requirements',

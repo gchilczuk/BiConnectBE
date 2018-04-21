@@ -1,5 +1,7 @@
 from django.db import transaction
+from django.http import HttpResponse
 from rest_framework import permissions
+from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -9,6 +11,7 @@ from rest_framework_extensions.mixins import DetailSerializerMixin
 from descriptor.models import Person, Meeting, Group, Speech, Requirement, Recommendation
 from descriptor.serializers import PersonSerializer, MeetingSerializer, GroupSerializer, MeetingDetailSerializer, \
     SpeechSerializer, RequirementSerializer, RecommendationSerializer
+from descriptor.utils import Note
 
 
 class HelloWorld(APIView):
@@ -52,6 +55,18 @@ class MeetingViewSet(DetailSerializerMixin, ModelViewSet):
             meeting = self.get_queryset().create(**serializer.validated_data,
                                                  group_id=self.kwargs['parent_lookup_group'])
             return Response(self.serializer_class(meeting).data)
+
+    @action(detail=True)
+    def note(self, request, **kwargs):
+        try:
+            meeting = self.get_queryset().get(pk=kwargs.get('pk'))
+        except Meeting.DoesNotExist:
+            raise NotFound('There is no meeting with such id in this group')
+        note = Note(meeting)
+        file_path = note.generate_txt()
+        response = HttpResponse(open(file_path, 'rb').read(), content_type='application/force-download')
+        response['Content-Disposition'] = 'attachment; filename="notatka.txt"'
+        return response
 
 
 class SpeechViewSet(ModelViewSet):

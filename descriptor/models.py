@@ -24,7 +24,7 @@ class Meeting(models.Model):
 
 class Speech(models.Model):
     person = models.ForeignKey(to='Person', on_delete=models.CASCADE, related_name='speeches',
-                               related_query_name='speech')
+                               related_query_name='speech', null=True)
     meeting = models.ForeignKey(to=Meeting, on_delete=models.CASCADE, related_name='speeches',
                                 related_query_name='speech', null=True)
     sound_file = models.FileField(upload_to=sound_file_path, max_length=255, null=True)

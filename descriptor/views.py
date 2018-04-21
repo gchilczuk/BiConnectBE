@@ -3,9 +3,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet, ModelViewSet
 from rest_framework_extensions.mixins import DetailSerializerMixin
+from rest_framework.decorators import action
 
 from descriptor.models import Person, Meeting, Group
 from descriptor.serializers import PersonSerializer, MeetingSerializer, GroupSerializer, MeetingDetailSerializer
+from descriptor.utils import Note
 
 
 class HelloWorld(APIView):
@@ -49,3 +51,7 @@ class MeetingViewSet(DetailSerializerMixin, ModelViewSet):
             meeting = self.get_queryset().create(**serializer.validated_data,
                                                  group_id=self.kwargs['parent_lookup_group'])
             return Response(self.serializer_class(meeting).data)
+
+    @action(detail=True)
+    def note(self, request, **kwargs):
+        return Response(Note(self.get_queryset().get(kwargs.get('pk'))).generate())

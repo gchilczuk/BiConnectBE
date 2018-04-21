@@ -53,7 +53,9 @@ class RequirementListSerializer(serializers.ListSerializer):
             id = newreq.pop('id', None)
 
             if id is None:
-                instance.create(speech_id=kwargs['speech_id'], **newreq)
+                req = Requirement.objects.create(speech_id=kwargs['speech_id'], **newreq)
+                updated_ids.append(req.id)
+                req.save()
 
             else:
                 try:
@@ -87,7 +89,9 @@ class RecommendationListSerializer(serializers.ListSerializer):
             id = newrecom.pop('id', None)
 
             if id is None:
-                instance.create(speech_id=kwargs['speech_id'], **newrecom)
+                recom = instance.create(speech_id=kwargs['speech_id'], **newrecom)
+                updated_ids.append(recom.id)
+                recom.save()
 
             else:
                 try:

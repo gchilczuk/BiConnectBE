@@ -56,7 +56,7 @@ class MeetingViewSet(DetailSerializerMixin, ModelViewSet):
     @action(detail=True)
     def note(self, request, **kwargs):
         try:
-            return Response(Note(self.get_queryset().get(pk=kwargs.get('pk'))).generate())
+            meeting = self.get_queryset().get(kwargs.get('pk'))
         except Meeting.DoesNotExist:
-            raise NotFound("There is no meeting witt such id.")
-
+            raise NotFound('There is no meeting with such id in this group')
+        return Response(Note(meeting).generate())

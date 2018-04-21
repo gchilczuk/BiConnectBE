@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet, ModelViewSet
 from rest_framework_extensions.mixins import DetailSerializerMixin
 
-from descriptor.models import Person, Meeting, Group, Speech, Requirement
+from descriptor.models import Person, Meeting, Group, Speech, Requirement, Recommendation
 from descriptor.serializers import PersonSerializer, MeetingSerializer, GroupSerializer, MeetingDetailSerializer, \
     SpeechSerializer, RequirementSerializer, RecommendationSerializer
 
@@ -65,16 +65,19 @@ class SpeechViewSet(ModelViewSet):
         return Response(self.serializer_class(speech).data)
 
     def update(self, request, *args, **kwargs):
-        pk = kwargs.get('pk')
+        speech_id = kwargs.get('pk')
         serializer = self.serializer_class(data=request.data)
-        serializer_req = RequirementSerializer(Requirement.objects.filter(speech_id=kwargs.get('pk')), data=request.data.get('requirements'), many=True)
+        serializer_req = RequirementSerializer(data=request.data.get('requirements'), many=True)
         serializer_rec = RecommendationSerializer(data=request.data.get('recommendations'), many=True)
-
 
         if (serializer.is_valid(raise_exception=True)
                 and serializer_rec.is_valid(raise_exception=True)
                 and serializer_req.is_valid(raise_exception=True)):
-            serializer_req.save()
+            serializer.save(speech_id)
+            serializer_req.update(Requirement.objects.filter(speech_id=speech_id),
+                                  serializer_req.validated_data, speech_id=speech_id)
+            serializer_rec.update(Recommendation.objects.filter(speech_id=speech_id),
+                                  serializer_rec.validated_data, speech_id=speech_id)
 
             # speech = serializer.save(kwargs.get('pk'))
 
@@ -83,4 +86,4 @@ class SpeechViewSet(ModelViewSet):
 
             # return Response(self.serializer_class(speech).data)
 
-        return HttpResponse("Elo")
+        return Response(self.serializer_class(Speech.objects.get(pk=speech_id)).data)

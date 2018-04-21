@@ -1,3 +1,4 @@
+from django.db import IntegrityError
 from rest_framework import serializers
 
 from .models import Person, Requirement, Meeting, Speech, Recommendation, Group, Category
@@ -48,9 +49,24 @@ class MeetingSerializer(serializers.ModelSerializer):
 
 
 class RequirementListSerializer(serializers.ListSerializer):
-    def update(self, instance, validated_data):
-        print(instance)
-        return instance
+    def update(self, instance, validated_data, **kwargs):
+        print(kwargs.get('dupa', 'brak'))
+        updated_ids = []
+        for newreq in validated_data:
+            updated_ids.append(newreq.get('id'))
+            try:
+                id = newreq.pop('id')
+                req, created = Requirement.objects.get_or_create(id=id, speech_id=kwargs['speech_id'], defaults=newreq)
+            except IntegrityError:
+                raise Exception("Cwaniaczysz, wygląda to tak jakbyś próbował zmienić speech.")
+
+            if not created:
+                req.description = newreq['description']
+                req.save()
+
+        for req in instance:
+            if req.id not in updated_ids:
+                req.delete()
 
 
 class RequirementSerializer(serializers.ModelSerializer):
@@ -64,6 +80,27 @@ class RequirementSerializer(serializers.ModelSerializer):
         list_serializer_class = RequirementListSerializer
 
 
+class RecommendationListSerializer(serializers.ListSerializer):
+    def update(self, instance, validated_data, **kwargs):
+        updated_ids = []
+        for newrecom in validated_data:
+            updated_ids.append(newrecom.get('id'))
+            try:
+                id = newrecom.pop('id')
+                recom, created = Recommendation.objects.get_or_create(id=id, speech_id=kwargs['speech_id'],
+                                                                      defaults=newrecom)
+            except IntegrityError:
+                raise Exception("Cwaniaczysz, wygląda to tak jakbyś próbował zmienić speech.")
+
+            if not created:
+                recom.description = newrecom['description']
+                recom.save()
+
+        for recom in instance:
+            if recom.id not in updated_ids:
+                recom.delete()
+
+
 class RecommendationSerializer(serializers.ModelSerializer):
     categories = CategorySerializer(many=True, read_only=True)
     id = serializers.IntegerField()
@@ -71,6 +108,7 @@ class RecommendationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recommendation
         fields = ('id', 'description', 'appearance_date', 'expiration_date', 'categories')
+        list_serializer_class = RecommendationListSerializer
 
 
 class SpeechSerializer(serializers.ModelSerializer):
@@ -85,8 +123,7 @@ class SpeechSerializer(serializers.ModelSerializer):
 
     def save(self, pk):
         speech = self.Meta.model.objects.get(pk=pk)
-        speech.date = self.validated_data['date']
-        speech.person = self.validated_data['person'].get()
+        speech.person = Person.objects.get(user__username=self.validated_data['person']['user']['username'])
         speech.save()
         return speech
 

@@ -1,10 +1,11 @@
 from django.db import IntegrityError
 from rest_framework import serializers
+from rest_framework.exceptions import ParseError
 
 from .models import Person, Requirement, Meeting, Speech, Recommendation, Group, Category
 
 
-class PersonPerfunctorySerializer(serializers.ModelSerializer):
+class SimplePersonSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source='user.first_name')
     last_name = serializers.CharField(source='user.last_name')
     username = serializers.CharField(source='user.username')
@@ -12,9 +13,6 @@ class PersonPerfunctorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Person
         fields = ('first_name', 'last_name', 'username')
-
-    def get(self):
-        return Person.objects.get(user__username=self.username)
 
 
 class PersonSerializer(serializers.ModelSerializer):
@@ -52,12 +50,12 @@ class RequirementListSerializer(serializers.ListSerializer):
     def update(self, instance, validated_data, **kwargs):
         updated_ids = []
         for newreq in validated_data:
-            updated_ids.append(newreq.get('id'))
+            id = newreq.pop('id')
+            updated_ids.append(id)
             try:
-                id = newreq.pop('id')
-                req, created = Requirement.objects.get_or_create(id=id, speech_id=kwargs['speech_id'], defaults=newreq)
+                req, created = instance.get_or_create(id=id, speech_id=kwargs['speech_id'], defaults=newreq)
             except IntegrityError:
-                raise Exception("Cwaniaczysz, wygląda to tak jakbyś próbował zmienić speech.")
+                raise ParseError("You cannot reassign Requirement to another speech.")
 
             if not created:
                 req.description = newreq['description']
@@ -83,13 +81,13 @@ class RecommendationListSerializer(serializers.ListSerializer):
     def update(self, instance, validated_data, **kwargs):
         updated_ids = []
         for newrecom in validated_data:
-            updated_ids.append(newrecom.get('id'))
+            id = newrecom.pop('id')
+            updated_ids.append(id)
             try:
-                id = newrecom.pop('id')
-                recom, created = Recommendation.objects.get_or_create(id=id, speech_id=kwargs['speech_id'],
-                                                                      defaults=newrecom)
+                recom, created = instance.get_or_create(id=id, speech_id=kwargs['speech_id'],
+                                                        defaults=newrecom)
             except IntegrityError:
-                raise Exception("Cwaniaczysz, wygląda to tak jakbyś próbował zmienić speech.")
+                raise ParseError("You cannot reassign Recommendation to another speech.")
 
             if not created:
                 recom.description = newrecom['description']
@@ -113,7 +111,7 @@ class RecommendationSerializer(serializers.ModelSerializer):
 class SpeechSerializer(serializers.ModelSerializer):
     requirements = RequirementSerializer(many=True, read_only=True)
     recommendations = RecommendationSerializer(many=True, read_only=True)
-    person = PersonPerfunctorySerializer()
+    person = SimplePersonSerializer()
 
     class Meta:
         model = Speech

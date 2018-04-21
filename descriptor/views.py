@@ -1,5 +1,4 @@
 from django.db import transaction
-from django.http import HttpResponse
 from rest_framework import permissions
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response

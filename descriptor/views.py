@@ -1,4 +1,5 @@
 from rest_framework import permissions
+from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet, ModelViewSet
@@ -54,4 +55,8 @@ class MeetingViewSet(DetailSerializerMixin, ModelViewSet):
 
     @action(detail=True)
     def note(self, request, **kwargs):
-        return Response(Note(self.get_queryset().get(kwargs.get('pk'))).generate())
+        try:
+            return Response(Note(self.get_queryset().get(pk=kwargs.get('pk'))).generate())
+        except Meeting.DoesNotExist:
+            raise NotFound("There is no meeting witt such id.")
+

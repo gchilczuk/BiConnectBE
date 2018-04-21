@@ -26,17 +26,17 @@ class Note(object):
     def generate(self):
         requirements = []
         recommendations = []
-        for speech in self.meeting.speeches:
-            for req in speech.requirements:
+        for speech in self.meeting.speeches.get_queryset():
+            for req in speech.requirements.get_queryset():
                 requirements.append((req, speech.person))
-            for rec in speech.recommendations:
+            for rec in speech.recommendations.get_queryset():
                 recommendations.append((rec, speech.person))
 
         return {
             'header': f'Podsumowanie spotkania grupy w mieście {self.meeting.group.city} z dnia {self.meeting.date}',
-            'summary': f'W spotkaniu wzięło udział {self.meeting.count_guests + self.meeting.count_members} osób'
-                       f'w tym {self.meeting.count_members} członków towarzystwa oraz {self.meeting.count_guests} gości.'
+            'summary': f'W spotkaniu wzięło udział {self.meeting.count_guests + self.meeting.count_members} osób '
+                       f'w tym {self.meeting.count_members} członków towarzystwa oraz {self.meeting.count_guests} gości. '
                        f'Zgłoszono {len(requirements)} potrzeb oraz {len(recommendations)} rekomendacji.',
-            'requirements': [f'{req.description}\n{person}' for req, person in requirements],
-            'recommendations': [f'{rec.description}\n{person}' for rec, person in requirements]
+            'requirements': [{'description': req.description, 'person': str(person)} for req, person in requirements],
+            'recommendations': [{'description': rec.description, 'person': str(person)} for rec, person in requirements]
         }

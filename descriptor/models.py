@@ -20,7 +20,7 @@ class Meeting(models.Model):
 
     class Meta:
         db_table = 'meetings'
-        ordering = ['id']
+        ordering = ['-date']
 
 
 class Speech(models.Model):

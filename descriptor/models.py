@@ -20,6 +20,7 @@ class Meeting(models.Model):
 
     class Meta:
         db_table = 'meetings'
+        ordering = ['-date']
 
 
 class Speech(models.Model):
@@ -32,6 +33,7 @@ class Speech(models.Model):
 
     class Meta:
         db_table = 'speeches'
+        ordering = ['id']
 
 
 class Person(models.Model):
@@ -44,6 +46,7 @@ class Person(models.Model):
 
     class Meta:
         db_table = 'people'
+        ordering = ['id']
 
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}, {self.user.email}'
@@ -60,6 +63,7 @@ class Requirement(models.Model):
 
     class Meta:
         db_table = 'requirements'
+        ordering = ['id']
 
 
 class Recommendation(models.Model):
@@ -72,6 +76,7 @@ class Recommendation(models.Model):
 
     class Meta:
         db_table = 'recommendation'
+        ordering = ['id']
 
 
 class Category(models.Model):
@@ -81,3 +86,4 @@ class Category(models.Model):
 
     class Meta:
         db_table = 'categories'
+        ordering = ['id']

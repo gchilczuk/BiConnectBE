@@ -39,7 +39,7 @@ class MeetingViewSet(DetailSerializerMixin, ModelViewSet):
     serializer_detail_class = MeetingDetailSerializer
 
     def get_queryset(self, *args, **kwargs):
-        return Meeting.objects.filter(group=self.kwargs['parent_lookup_group'])
+        return Meeting.objects.filter(group=self.kwargs['parent_lookup_group']).order_by(id)
 
     def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)

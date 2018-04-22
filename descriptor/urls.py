@@ -13,5 +13,4 @@ router.register(r'groups', views.GroupViewSet, base_name='group') \
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('hello/', views.HelloWorld.as_view()),
 ]

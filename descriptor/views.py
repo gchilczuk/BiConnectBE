@@ -99,8 +99,8 @@ class SpeechViewSet(ModelViewSet):
                     requirements = Requirement.objects.filter(speech_id=speech_id)
                     recommendations = Recommendation.objects.filter(speech_id=speech_id)
                 except (Requirement.DoesNotExist, Recommendation.DoesNotExist):
-                    raise NotFound("No Requirements ot recommendations in given speech,"
-                                   " but it's very, very strange internal error.")
+                    raise NotFound("No Requirements or Recommendations in given speech,"
+                                   " but it's very, very strange internal error. Please contact with administrator.")
 
                 serializer_req.update(requirements, serializer_req.validated_data, speech_id=speech_id)
                 serializer_rec.update(recommendations, serializer_rec.validated_data, speech_id=speech_id)

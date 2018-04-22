@@ -1,6 +1,6 @@
 from django.db import IntegrityError
 from rest_framework import serializers
-from rest_framework.exceptions import ParseError
+from rest_framework.exceptions import ParseError, NotFound
 
 from .models import Person, Requirement, Meeting, Speech, Recommendation, Group, Category
 
@@ -62,6 +62,9 @@ class RequirementListSerializer(serializers.ListSerializer):
                     req = instance.get(id=id, speech_id=kwargs['speech_id'])
                 except IntegrityError:
                     raise ParseError("You cannot reassign Requirement to another speech.")
+                except Requirement.DoesNotExist:
+                    raise NotFound("You are trying to update Requiremnt which does not exist"
+                                   " or belongs to another speech!")
                 updated_ids.append(id)
                 req.description = newreq['description']
                 req.save()
@@ -98,6 +101,9 @@ class RecommendationListSerializer(serializers.ListSerializer):
                     recom = instance.get(id=id, speech_id=kwargs['speech_id'])
                 except IntegrityError:
                     raise ParseError("You cannot reassign Recommendation to another speech.")
+                except Recommendation.DoesNotExist:
+                    raise NotFound("You are trying to update Recommendation which does not exist"
+                                   " or belongs to another speech!")
                 updated_ids.append(id)
                 recom.description = newrecom['description']
                 recom.save()
@@ -129,7 +135,10 @@ class SpeechSerializer(serializers.ModelSerializer):
 
     def save(self, pk):
         speech = self.Meta.model.objects.get(pk=pk)
-        speech.person = Person.objects.get(user__username=self.validated_data['person']['user']['username'])
+        try:
+            speech.person = Person.objects.get(user__username=self.validated_data['person']['user']['username'])
+        except Person.DoesNotExist:
+            raise NotFound("There is no Person with given username")
         speech.save()
         return speech
 

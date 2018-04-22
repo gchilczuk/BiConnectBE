@@ -26,7 +26,7 @@ class Note(object):
 
     def __init__(self, meeting):
         self.meeting = meeting
-        self.dir = STATIC_ROOT + f'{self.meeting.group.id}/'
+        self.dir = STATIC_ROOT + f'{self.meeting.group.city}_{self.meeting.group.id}/'
 
     def generate_json(self):
         requirements = []
@@ -49,20 +49,20 @@ class Note(object):
     def generate_txt(self):
         json = self.generate_json()
         self.create_dir()
-        file_path = self.dir + f'{self.meeting.id}'
+        file_path = self.dir + f'{self.meeting.id}_{self.meeting.date}'
         with open(file_path, 'w') as file:
             file.write(json['header'] + '\n')
             file.write('\n')
             file.write(json['summary'] + '\n')
             file.write('\n')
             file.write('\n')
-            file.write('Zgłoszone potrzeby:\n')
+            file.write('ZGŁOSZONE POTRZEBY:\n\n')
             for req in json['requirements']:
                 file.write(req['description'] + '\n')
                 file.write(req['person'] + '\n')
                 file.write('\n')
             file.write('\n')
-            file.write('Zgłoszone rekomendacje:\n')
+            file.write('ZGŁOSZONE REKOMENDACJE:\n\n')
             for req in json['recommendations']:
                 file.write(req['description'] + '\n')
                 file.write(req['person'] + '\n')

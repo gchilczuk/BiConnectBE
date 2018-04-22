@@ -4,7 +4,6 @@ from rest_framework import permissions
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet, ModelViewSet
 from rest_framework_extensions.mixins import DetailSerializerMixin
 
@@ -12,13 +11,6 @@ from descriptor.models import Person, Meeting, Group, Speech, Requirement, Recom
 from descriptor.serializers import PersonSerializer, MeetingSerializer, GroupSerializer, MeetingDetailSerializer, \
     SpeechSerializer, RequirementSerializer, RecommendationSerializer
 from descriptor.utils import Note
-
-
-class HelloWorld(APIView):
-    permission_classes = (permissions.AllowAny,)
-
-    def get(self, request):
-        return Response({"text": "Hello world!"})
 
 
 class PeopleViewSet(ViewSet):

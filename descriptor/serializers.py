@@ -60,11 +60,11 @@ class RequirementListSerializer(serializers.ListSerializer):
             else:
                 try:
                     req = instance.get(id=id, speech_id=kwargs['speech_id'])
-
                 except IntegrityError:
                     raise ParseError("You cannot reassign Requirement to another speech.")
                 except Requirement.DoesNotExist:
-                    raise NotFound("You are trying to update Requiremnt which does not exist or belongs to another speech!")
+                    raise NotFound("You are trying to update Requiremnt which does not exist"
+                                   " or belongs to another speech!")
                 updated_ids.append(id)
                 req.description = newreq['description']
                 req.save()
@@ -102,7 +102,8 @@ class RecommendationListSerializer(serializers.ListSerializer):
                 except IntegrityError:
                     raise ParseError("You cannot reassign Recommendation to another speech.")
                 except Recommendation.DoesNotExist:
-                    raise NotFound("You are trying to update Recommendation which does not exist or belongs to another speech!")
+                    raise NotFound("You are trying to update Recommendation which does not exist"
+                                   " or belongs to another speech!")
                 updated_ids.append(id)
                 recom.description = newrecom['description']
                 recom.save()

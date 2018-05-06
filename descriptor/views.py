@@ -14,7 +14,7 @@ from descriptor.utils import Note
 
 
 class PeopleViewSet(ViewSet):
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.IsAuthenticated,)
     queryset = Person.objects
     serializer_class = PersonSerializer
 

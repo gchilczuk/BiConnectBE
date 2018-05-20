@@ -1,6 +1,6 @@
 from django.db import transaction
 from django.http import HttpResponse
-from rest_framework import permissions
+from rest_framework import permissions, mixins
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
@@ -9,11 +9,11 @@ from rest_framework_extensions.mixins import DetailSerializerMixin
 
 from descriptor.models import Person, Meeting, Group, Speech, Requirement, Recommendation
 from descriptor.serializers import PersonSerializer, MeetingSerializer, GroupSerializer, MeetingDetailSerializer, \
-    SpeechSerializer, RequirementSerializer, RecommendationSerializer
+    SpeechSerializer, RequirementSerializer, RecommendationSerializer, SimplePersonSerializer
 from descriptor.utils import Note
 
 
-class PeopleViewSet(ViewSet):
+class PeopleViewSet(ViewSet, mixins.CreateModelMixin):
     permission_classes = (permissions.AllowAny,)
     queryset = Person.objects
     serializer_class = PersonSerializer
@@ -25,6 +25,21 @@ class PeopleViewSet(ViewSet):
     def retrieve(self, request, pk=None):
         result = self.serializer_class(self.queryset.filter(pk=pk).first())
         return Response(result.data)
+
+
+class FastAddPersonViewSet(ViewSet):
+    permission_classes = (permissions.AllowAny,)
+    queryset = Person.objects
+    serializer_class = SimplePersonSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid()
+        data = serializer.validated_data.copy()
+        data['group'] = Group.objects.get(id=self.kwargs['parent_lookup_group'])
+        result = serializer.create(data)
+
+        return Response(self.serializer_class(result).data)
 
 
 class GroupViewSet(ModelViewSet):

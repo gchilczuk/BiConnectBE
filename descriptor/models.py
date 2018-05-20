@@ -18,6 +18,11 @@ class Meeting(models.Model):
     group = models.ForeignKey(to=Group, on_delete=models.CASCADE, related_name='meetings',
                               related_query_name='meeting')
 
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.count_members = self.speeches.filter(person__member=True).count()
+        self.count_guests = self.speeches.filter(person__member=False).count()
+        super().save(force_insert, force_update, using, update_fields)
+
     class Meta:
         db_table = 'meetings'
         ordering = ['-date']

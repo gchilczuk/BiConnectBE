@@ -33,7 +33,7 @@ class Speech(models.Model):
 
     class Meta:
         db_table = 'speeches'
-        ordering = ['id']
+        ordering = ['-id']
 
 
 class Person(models.Model):

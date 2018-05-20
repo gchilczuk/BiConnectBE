@@ -19,8 +19,8 @@ class Meeting(models.Model):
                               related_query_name='meeting')
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        self.count_members = self.speeches.filter(person__member=True).count()
-        self.count_guests = self.speeches.filter(person__member=False).count()
+        self.count_members = self.speeches.filter(person__member=True).distinct().count()
+        self.count_guests = self.speeches.filter(person__member=False).distinct().count()
         super().save(force_insert, force_update, using, update_fields)
 
     class Meta:

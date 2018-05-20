@@ -34,7 +34,7 @@ class FastAddPersonViewSet(ViewSet):
 
     def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
-        serializer.is_valid()
+        serializer.is_valid(raise_exception=True)
         data = serializer.validated_data.copy()
         data['group'] = Group.objects.get(id=self.kwargs['parent_lookup_group'])
         result = serializer.create(data)

@@ -10,7 +10,7 @@ class SimplePersonSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source='user.first_name', required=True)
     last_name = serializers.CharField(source='user.last_name', required=True)
     username = serializers.CharField(source='user.username', read_only=True)
-    email = serializers.CharField(source='user.email', write_only=True)
+    email = serializers.CharField(source='user.email', required=False)
 
     class Meta:
         model = Person

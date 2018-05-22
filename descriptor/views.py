@@ -70,6 +70,7 @@ class SpeechViewSet(ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         speech = self.get_queryset().create(meeting_id=self.kwargs['parent_lookup_meeting'])
+        speech.meeting.save()
         return Response(self.serializer_class(speech).data)
 
     def update(self, request, *args, **kwargs):
@@ -96,5 +97,5 @@ class SpeechViewSet(ModelViewSet):
 
                 serializer_req.update(requirements, serializer_req.validated_data, speech_id=speech_id)
                 serializer_rec.update(recommendations, serializer_rec.validated_data, speech_id=speech_id)
-
+        Speech.objects.get(pk=speech_id).meeting.save()
         return Response(self.serializer_class(Speech.objects.get(pk=speech_id)).data)

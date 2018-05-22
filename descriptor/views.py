@@ -13,7 +13,7 @@ from descriptor.serializers import PersonSerializer, MeetingSerializer, GroupSer
 from descriptor.utils import Note
 
 
-class PeopleViewSet(ViewSet, mixins.CreateModelMixin):
+class PeopleViewSet(ViewSet):
     permission_classes = (permissions.AllowAny,)
     queryset = Person.objects
     serializer_class = PersonSerializer
@@ -54,7 +54,6 @@ class MeetingViewSet(DetailSerializerMixin, ModelViewSet):
     serializer_detail_class = MeetingDetailSerializer
 
     def get_queryset(self, *args, **kwargs):
-        for m in Meeting.objects.all(): m.save()
         return Meeting.objects.filter(group=self.kwargs['parent_lookup_group'])
 
     def create(self, request, *args, **kwargs):

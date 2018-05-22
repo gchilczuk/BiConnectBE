@@ -43,7 +43,7 @@ class Note(object):
                        f'w tym {self.meeting.count_members} członków towarzystwa oraz {self.meeting.count_guests} gości. '
                        f'Zgłoszono {len(requirements)} potrzeb oraz {len(recommendations)} rekomendacji.',
             'requirements': [{'description': req.description, 'person': str(person)} for req, person in requirements],
-            'recommendations': [{'description': rec.description, 'person': str(person)} for rec, person in requirements]
+            'recommendations': [{'description': rec.description, 'person': str(person)} for rec, person in recommendations]
         }
 
     def generate_txt(self):

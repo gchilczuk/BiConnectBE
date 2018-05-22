@@ -1,3 +1,6 @@
+import uuid
+
+from django.contrib.auth.models import User
 from django.db import IntegrityError
 from rest_framework import serializers
 from rest_framework.exceptions import ParseError, NotFound
@@ -6,13 +9,35 @@ from .models import Person, Requirement, Meeting, Speech, Recommendation, Group,
 
 
 class SimplePersonSerializer(serializers.ModelSerializer):
-    first_name = serializers.CharField(source='user.first_name')
-    last_name = serializers.CharField(source='user.last_name')
-    username = serializers.CharField(source='user.username')
+    first_name = serializers.CharField(source='user.first_name', required=True)
+    last_name = serializers.CharField(source='user.last_name', required=True)
+    username = serializers.CharField(source='user.username', required=False)
+    email = serializers.CharField(source='user.email', required=False, allow_blank=True)
 
     class Meta:
         model = Person
-        fields = ('first_name', 'last_name', 'username')
+        fields = ('first_name', 'last_name', 'username', 'email')
+
+    def create(self, validated_data):
+        user_data = validated_data.get('user')
+        first_name = user_data.get('first_name')
+        last_name = user_data.get('last_name')
+
+        email = user_data.get('email', '')
+
+        if email != '':
+            email_taken = Person.objects.filter(user__email=email).count()
+            if email_taken:
+                raise ParseError("Email address is already used by another user!")
+
+        group = validated_data['group']
+        base_login = (first_name + last_name).lower()
+        count_logins = Person.objects.filter(user__username__icontains=base_login).count()
+        login = base_login + (str(count_logins) if count_logins > 0 else '')
+        user = User.objects.create(first_name=first_name, last_name=last_name, email=email,
+                                   username=login, password='')
+        person = Person.objects.create(user=user, group=group, member=False)
+        return person
 
 
 class PersonSerializer(serializers.ModelSerializer):

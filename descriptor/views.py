@@ -13,7 +13,7 @@ from descriptor.serializers import PersonSerializer, MeetingSerializer, GroupSer
 from descriptor.utils import Note
 
 
-class PeopleViewSet(ViewSet, mixins.CreateModelMixin):
+class PeopleViewSet(ViewSet):
     permission_classes = (permissions.AllowAny,)
     queryset = Person.objects
     serializer_class = PersonSerializer

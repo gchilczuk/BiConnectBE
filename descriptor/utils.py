@@ -47,26 +47,27 @@ class Note(object):
         }
 
     def generate_txt(self):
+        newline = '\r\n'
         json = self.generate_json()
         self.create_dir()
         file_path = self.dir + f'{self.meeting.id}_{self.meeting.date}'
         with open(file_path, 'w') as file:
-            file.write(json['header'] + '\n')
-            file.write('\n')
-            file.write(json['summary'] + '\n')
-            file.write('\n')
-            file.write('\n')
+            file.write(json['header'] + newline)
+            file.write(newline)
+            file.write(json['summary'] + newline)
+            file.write(newline)
+            file.write(newline)
             file.write('ZGŁOSZONE POTRZEBY:\n\n')
             for req in json['requirements']:
-                file.write(req['description'] + '\n')
-                file.write(req['person'] + '\n')
-                file.write('\n')
-            file.write('\n')
-            file.write('ZGŁOSZONE REKOMENDACJE:\n\n')
+                file.write(req['description'] + newline)
+                file.write(req['person'] + newline)
+                file.write(newline)
+            file.write(newline)
+            file.write('ZGŁOSZONE REKOMENDACJE:'+newline)
             for req in json['recommendations']:
-                file.write(req['description'] + '\n')
-                file.write(req['person'] + '\n')
-                file.write('\n')
+                file.write(req['description'] + newline)
+                file.write(req['person'] + newline)
+                file.write(newline)
 
         return file_path
 

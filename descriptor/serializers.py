@@ -152,7 +152,7 @@ class BusinessDescriptionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BusinessDescription
-        fields = '__all__'
+        fields = ('id', 'description')
 
 
 class SpeechSerializer(serializers.ModelSerializer):
@@ -163,7 +163,7 @@ class SpeechSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Speech
-        fields = ('id', 'requirements', 'recommendations', 'person', 'date', 'sound_file')
+        fields = ('id', 'requirements', 'recommendations', 'person', 'date', 'sound_file', 'business_description')
         read_only_fields = ('id', 'date')
 
     def save(self, pk):

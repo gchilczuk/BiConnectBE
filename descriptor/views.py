@@ -1,6 +1,6 @@
 from django.db import transaction
 from django.http import HttpResponse
-from rest_framework import permissions, mixins
+from rest_framework import permissions
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
@@ -104,12 +104,8 @@ class SpeechViewSet(ModelViewSet):
                 except Speech.DoesNotExist:
                     raise NotFound("No such speech")
 
-                try:
-                    requirements = Requirement.objects.filter(speech_id=speech_id)
-                    recommendations = Recommendation.objects.filter(speech_id=speech_id)
-                except (Requirement.DoesNotExist, Recommendation.DoesNotExist):
-                    raise NotFound("No Requirements or Recommendations in given speech,"
-                                   " but it's very, very strange internal error. Please contact with administrator.")
+                requirements = Requirement.objects.filter(speech_id=speech_id)
+                recommendations = Recommendation.objects.filter(speech_id=speech_id)
 
                 serializer_req.update(requirements, serializer_req.validated_data, speech_id=speech_id)
                 serializer_rec.update(recommendations, serializer_rec.validated_data, speech_id=speech_id)

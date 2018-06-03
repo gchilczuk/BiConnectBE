@@ -118,7 +118,7 @@ class SpeechViewSet(ModelViewSet):
 
                 if business_description is None:
                     speech.business_description = bdesc
-                    speech.save()
+                speech.save()
 
 
         speech.meeting.save()

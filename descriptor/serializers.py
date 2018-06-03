@@ -156,7 +156,7 @@ class BusinessDescriptionSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         if instance:
-            instance.descrition = validated_data.get('description', '')
+            instance.description = validated_data.get('description', '')
         else:
             instance = self.Meta.model.objects.create(**validated_data)
         instance.save()

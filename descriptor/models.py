@@ -32,9 +32,9 @@ class BusinessDescription(models.Model):
 
 
 class Speech(models.Model):
-    person = models.ForeignKey(to='Person', on_delete=models.SET_NULL, related_name='speeches',
+    person = models.ForeignKey(to='Person', on_delete=models.CASCADE, related_name='speeches',
                                related_query_name='speech', null=True)
-    meeting = models.ForeignKey(to=Meeting, on_delete=models.SET_NULL, related_name='speeches',
+    meeting = models.ForeignKey(to=Meeting, on_delete=models.CASCADE, related_name='speeches',
                                 related_query_name='speech', null=True)
     business_description = models.ForeignKey(to=BusinessDescription, on_delete=models.SET_NULL,
                                              related_name='speech', null=True)

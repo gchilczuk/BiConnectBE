@@ -5,7 +5,7 @@ from django.db import IntegrityError
 from rest_framework import serializers
 from rest_framework.exceptions import ParseError, NotFound
 
-from .models import Person, Requirement, Meeting, Speech, Recommendation, Group, Category
+from .models import Person, Requirement, Meeting, Speech, Recommendation, Group, Category, BusinessDescription
 
 
 class SimplePersonSerializer(serializers.ModelSerializer):
@@ -88,7 +88,7 @@ class RequirementListSerializer(serializers.ListSerializer):
                 except IntegrityError:
                     raise ParseError("You cannot reassign Requirement to another speech.")
                 except Requirement.DoesNotExist:
-                    raise NotFound("You are trying to update Requiremnt which does not exist"
+                    raise NotFound("You are trying to update Requirement which does not exist"
                                    " or belongs to another speech!")
                 updated_ids.append(id)
                 req.description = newreq['description']
@@ -148,14 +148,29 @@ class RecommendationSerializer(serializers.ModelSerializer):
         list_serializer_class = RecommendationListSerializer
 
 
+class BusinessDescriptionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = BusinessDescription
+        fields = ('id', 'description')
+
+    def update(self, instance, validated_data):
+        if instance:
+            instance.description = validated_data.get('description', '')
+        else:
+            instance = self.Meta.model.objects.create(**validated_data)
+        instance.save()
+        return instance
+
 class SpeechSerializer(serializers.ModelSerializer):
     requirements = RequirementSerializer(many=True, read_only=True)
     recommendations = RecommendationSerializer(many=True, read_only=True)
     person = SimplePersonSerializer()
+    business_description = BusinessDescriptionSerializer()
 
     class Meta:
         model = Speech
-        fields = ('id', 'requirements', 'recommendations', 'person', 'date', 'sound_file')
+        fields = ('id', 'requirements', 'recommendations', 'person', 'date', 'sound_file', 'business_description')
         read_only_fields = ('id', 'date')
 
     def save(self, pk):

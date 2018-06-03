@@ -154,6 +154,13 @@ class BusinessDescriptionSerializer(serializers.ModelSerializer):
         model = BusinessDescription
         fields = ('id', 'description')
 
+    def update(self, instance, validated_data):
+        if instance:
+            instance.descrition = validated_data.get('description', '')
+        else:
+            instance = self.Meta.model.objects.create(**validated_data)
+        instance.save()
+        return instance
 
 class SpeechSerializer(serializers.ModelSerializer):
     requirements = RequirementSerializer(many=True, read_only=True)

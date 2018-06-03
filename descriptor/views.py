@@ -7,9 +7,10 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet, ModelViewSet
 from rest_framework_extensions.mixins import DetailSerializerMixin
 
-from descriptor.models import Person, Meeting, Group, Speech, Requirement, Recommendation
+from descriptor.models import Person, Meeting, Group, Speech, Requirement, Recommendation, BusinessDescription
 from descriptor.serializers import PersonSerializer, MeetingSerializer, GroupSerializer, MeetingDetailSerializer, \
-    SpeechSerializer, RequirementSerializer, RecommendationSerializer, SimplePersonSerializer
+    SpeechSerializer, RequirementSerializer, RecommendationSerializer, SimplePersonSerializer, \
+    BusinessDescriptionSerializer
 from descriptor.utils import Note
 
 
@@ -91,13 +92,16 @@ class SpeechViewSet(ModelViewSet):
 
     def update(self, request, *args, **kwargs):
         speech_id = kwargs.get('pk')
+        speech = Speech.objects.get(pk=speech_id)
         serializer = self.serializer_class(data=request.data)
         serializer_req = RequirementSerializer(data=request.data.get('requirements'), many=True)
         serializer_rec = RecommendationSerializer(data=request.data.get('recommendations'), many=True)
+        serializer_desc = BusinessDescriptionSerializer(data=request.data.get('business_description'))
 
         if (serializer.is_valid(raise_exception=True)
                 and serializer_rec.is_valid(raise_exception=True)
-                and serializer_req.is_valid(raise_exception=True)):
+                and serializer_req.is_valid(raise_exception=True)
+                and serializer_desc.is_valid(raise_exception=True)):
             with transaction.atomic():
                 try:
                     serializer.save(speech_id)
@@ -106,8 +110,16 @@ class SpeechViewSet(ModelViewSet):
 
                 requirements = Requirement.objects.filter(speech_id=speech_id)
                 recommendations = Recommendation.objects.filter(speech_id=speech_id)
+                business_description = speech.business_description
 
                 serializer_req.update(requirements, serializer_req.validated_data, speech_id=speech_id)
                 serializer_rec.update(recommendations, serializer_rec.validated_data, speech_id=speech_id)
-        Speech.objects.get(pk=speech_id).meeting.save()
-        return Response(self.serializer_class(Speech.objects.get(pk=speech_id)).data)
+                bdesc = serializer_desc.update(business_description, serializer_desc.validated_data)
+
+                if business_description is None:
+                    speech.business_description = bdesc
+                    speech.save()
+
+
+        speech.meeting.save()
+        return Response(self.serializer_class(speech).data)

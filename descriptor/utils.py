@@ -30,7 +30,7 @@ class Note(object):
 
     def generate_json(self):
         speeches = []
-        for speech in self.meeting.speeches.get_queryset():
+        for speech in self.meeting.speeches.get_queryset().prefetch_related('person', 'business_description', 'requirements', 'recommendations'):
             bussiness_desc = speech.business_description
             req_desc = speech.requirements.first()
             rec_desc = speech.recommendations.first()

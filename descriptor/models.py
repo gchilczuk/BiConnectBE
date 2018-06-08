@@ -27,14 +27,20 @@ class Meeting(models.Model):
         db_table = 'meetings'
         ordering = ['-date']
 
+class BusinessDescription(models.Model):
+    description = models.TextField()
+
 
 class Speech(models.Model):
     person = models.ForeignKey(to='Person', on_delete=models.CASCADE, related_name='speeches',
                                related_query_name='speech', null=True)
     meeting = models.ForeignKey(to=Meeting, on_delete=models.CASCADE, related_name='speeches',
                                 related_query_name='speech', null=True)
+    business_description = models.ForeignKey(to=BusinessDescription, on_delete=models.SET_NULL,
+                                             related_name='speech', null=True)
     sound_file = models.FileField(upload_to=sound_file_path, max_length=255, null=True)
     date = models.DateField(auto_now_add=True)
+    confirmed = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'speeches'
@@ -48,6 +54,7 @@ class Person(models.Model):
     member = models.BooleanField(default=True)
     newsletter = models.BooleanField(default=True)
     speech_confirm = models.BooleanField(default=True)
+
 
     class Meta:
         db_table = 'people'
@@ -82,6 +89,7 @@ class Recommendation(models.Model):
     class Meta:
         db_table = 'recommendation'
         ordering = ['id']
+
 
 
 class Category(models.Model):

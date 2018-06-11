@@ -30,6 +30,10 @@ class Meeting(models.Model):
 class BusinessDescription(models.Model):
     description = models.TextField()
 
+    def __str__(self):
+        return '<Potrzebna aktualizacja BusinessDescription.__str__>'
+
+
 
 class Speech(models.Model):
     person = models.ForeignKey(to='Person', on_delete=models.CASCADE, related_name='speeches',
@@ -46,6 +50,9 @@ class Speech(models.Model):
         db_table = 'speeches'
         ordering = ['-id']
 
+    def __str__(self):
+        return f'{self.business_description}\n\n {self.requirements.first()}\n\n {self.recommendations.first()}'
+
 
 class Person(models.Model):
     user = models.OneToOneField(to=User, on_delete=models.CASCADE)
@@ -59,6 +66,10 @@ class Person(models.Model):
     class Meta:
         db_table = 'people'
         ordering = ['id']
+
+    @property
+    def email(self):
+        return self.user.email
 
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}, {self.user.email}'
@@ -77,6 +88,10 @@ class Requirement(models.Model):
         db_table = 'requirements'
         ordering = ['id']
 
+    def __str__(self):
+        return '<Potrzebna aktualizacja Requirement.__str__>'
+
+
 
 class Recommendation(models.Model):
     speech = models.ForeignKey(to=Speech, on_delete=models.CASCADE, related_name='recommendations',
@@ -89,6 +104,9 @@ class Recommendation(models.Model):
     class Meta:
         db_table = 'recommendation'
         ordering = ['id']
+
+    def __str__(self):
+        return '<Potrzebna aktualizacja Recommendation.__str__>'
 
 
 

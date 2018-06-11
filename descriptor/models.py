@@ -28,7 +28,7 @@ class Meeting(models.Model):
         ordering = ['-date']
 
 class BusinessDescription(models.Model):
-    description = models.TextField()
+    description = models.TextField(blank=True)
 
     def __str__(self):
         return '<Potrzebna aktualizacja BusinessDescription.__str__>'

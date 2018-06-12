@@ -126,3 +126,9 @@ class SpeechViewSet(ModelViewSet):
 
         speech.meeting.save()
         return Response(self.serializer_class(speech).data)
+
+    @action(detail=True)
+    def confirm(self, *args, **kwargs):
+        speech = self.get_queryset().get(pk=kwargs.get('pk'))
+        speech.confirm()
+        return Response()

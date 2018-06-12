@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet, ModelViewSet
 from rest_framework_extensions.mixins import DetailSerializerMixin
 
-from descriptor.models import Person, Meeting, Group, Speech, Requirement, Recommendation, BusinessDescription
+from descriptor.models import Person, Meeting, Group, Speech, Requirement, Recommendation
 from descriptor.serializers import PersonSerializer, MeetingSerializer, GroupSerializer, MeetingDetailSerializer, \
     SpeechSerializer, RequirementSerializer, RecommendationSerializer, SimplePersonSerializer, \
     BusinessDescriptionSerializer
@@ -120,6 +120,11 @@ class SpeechViewSet(ModelViewSet):
                     speech.business_description = bdesc
                 speech.save()
 
-
         speech.meeting.save()
         return Response(self.serializer_class(speech).data)
+
+    @action(detail=True)
+    def confirm(self, *args, **kwargs):
+        speech = self.get_queryset().get(pk=kwargs.get('pk'))
+        speech.confirm()
+        return Response()

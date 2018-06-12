@@ -27,6 +27,7 @@ class Meeting(models.Model):
         db_table = 'meetings'
         ordering = ['-date']
 
+
 class BusinessDescription(models.Model):
     description = models.TextField()
 
@@ -46,6 +47,10 @@ class Speech(models.Model):
         db_table = 'speeches'
         ordering = ['-id']
 
+    def confirm(self):
+        self.confirmed = True
+        self.save()
+
 
 class Person(models.Model):
     user = models.OneToOneField(to=User, on_delete=models.CASCADE)
@@ -54,7 +59,6 @@ class Person(models.Model):
     member = models.BooleanField(default=True)
     newsletter = models.BooleanField(default=True)
     speech_confirm = models.BooleanField(default=True)
-
 
     class Meta:
         db_table = 'people'
@@ -89,7 +93,6 @@ class Recommendation(models.Model):
     class Meta:
         db_table = 'recommendation'
         ordering = ['id']
-
 
 
 class Category(models.Model):

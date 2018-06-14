@@ -4,7 +4,9 @@ from BiConnect import settings
 
 
 def prepare_mail_body(speech):
-    return str(speech)
+    return f'Twoja wypowiedź: \n\n {str(speech)}' \
+           f'Jeśli masz jakieś uwagi edytuj swoją wypowiedź tutaj' \
+           f'--tutaj link--'
 
 
 def send_speechsum_mail(speech):

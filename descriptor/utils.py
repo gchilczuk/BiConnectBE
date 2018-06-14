@@ -29,21 +29,23 @@ class Note(object):
         self.dir = STATIC_ROOT + f'{self.meeting.group.city}_{self.meeting.group.id}/'
 
     def generate_json(self):
-        requirements = []
-        recommendations = []
-        for speech in self.meeting.speeches.get_queryset():
-            for req in speech.requirements.get_queryset():
-                requirements.append((req, speech.person))
-            for rec in speech.recommendations.get_queryset():
-                recommendations.append((rec, speech.person))
+        speeches = []
+        for speech in self.meeting.speeches.get_queryset().prefetch_related('person', 'business_description', 'requirements', 'recommendations'):
+            bussiness_desc = speech.business_description
+            req_desc = speech.requirements.first()
+            rec_desc = speech.recommendations.first()
+            speeches.append((speech.person, bussiness_desc, req_desc, rec_desc))
 
         return {
             'header': f'Podsumowanie spotkania grupy w mieście {self.meeting.group.city} z dnia {self.meeting.date}',
             'summary': f'W spotkaniu wzięło udział {self.meeting.count_guests + self.meeting.count_members} osób '
-                       f'w tym {self.meeting.count_members} członków towarzystwa oraz {self.meeting.count_guests} gości. '
-                       f'Zgłoszono {len(requirements)} potrzeb oraz {len(recommendations)} rekomendacji.',
-            'requirements': [{'description': req.description, 'person': str(person)} for req, person in requirements],
-            'recommendations': [{'description': rec.description, 'person': str(person)} for rec, person in recommendations]
+                       f'w tym {self.meeting.count_members} członków towarzystwa oraz {self.meeting.count_guests} gości.',
+            'speeches': [{
+                             'person': str(person),
+                             'bus_description': bussiness_desc,
+                             'req_description': req_desc,
+                             'rec_description': rec_desc
+                         } for person, bussiness_desc, req_desc, rec_desc in speeches]
         }
 
     def generate_txt(self):
@@ -56,17 +58,15 @@ class Note(object):
             file.write(newline)
             file.write(json['summary'] + newline)
             file.write(newline)
-            file.write(newline)
-            file.write('ZGŁOSZONE POTRZEBY:\n\n')
-            for req in json['requirements']:
-                file.write(req['description'] + newline)
-                file.write(req['person'] + newline)
-                file.write(newline)
-            file.write(newline)
-            file.write('ZGŁOSZONE REKOMENDACJE:'+newline)
-            for req in json['recommendations']:
-                file.write(req['description'] + newline)
-                file.write(req['person'] + newline)
+            file.write('WYSTĄPIENIA:' + newline)
+            for speech in json['speeches']:
+                file.write(speech.get('person') + newline)
+                if speech.get('bus_description'):
+                    file.write(speech.get('bus_description') + newline)
+                if speech.get('req_description'):
+                    file.write(speech.get('req_description').description + newline)
+                if speech.get('rec_description'):
+                    file.write(speech.get('rec_description').description + newline)
                 file.write(newline)
 
         return file_path

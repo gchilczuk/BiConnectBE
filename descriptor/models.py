@@ -32,7 +32,7 @@ class BusinessDescription(models.Model):
     description = models.TextField(blank=True)
 
     def __str__(self):
-        return '<Potrzebna aktualizacja BusinessDescription.__str__>'
+        return f'Opis działalności: \n {self.description}'
 
 
 
@@ -94,7 +94,7 @@ class Requirement(models.Model):
         ordering = ['id']
 
     def __str__(self):
-        return '<Potrzebna aktualizacja Requirement.__str__>'
+        return f'Potrzeba: \n {self.description}'
 
 
 
@@ -111,7 +111,7 @@ class Recommendation(models.Model):
         ordering = ['id']
 
     def __str__(self):
-        return '<Potrzebna aktualizacja Recommendation.__str__>'
+        return f'Rekomendacja: \n {self.description}'
 
 
 class Category(models.Model):

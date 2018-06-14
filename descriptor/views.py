@@ -11,6 +11,7 @@ from descriptor.models import Person, Meeting, Group, Speech, Requirement, Recom
 from descriptor.models import Person, Meeting, Group, Speech, Requirement, Recommendation
 from descriptor.mailing import send_speechsum_mail
 from descriptor.models import Person, Meeting, Group, Speech, Requirement, Recommendation, BusinessDescription
+from descriptor.models import Person, Meeting, Group, Speech, Requirement, Recommendation
 from descriptor.serializers import PersonSerializer, MeetingSerializer, GroupSerializer, MeetingDetailSerializer, \
     SpeechSerializer, RequirementSerializer, RecommendationSerializer, SimplePersonSerializer, \
     BusinessDescriptionSerializer
@@ -131,6 +132,12 @@ class SpeechViewSet(ModelViewSet):
         speech.meeting.save()
         return Response(self.serializer_class(speech).data)
 
+    @action(detail=False)
+    def send_mails(self, request, *args, **kwargs):
+        for speech in self.get_queryset():
+            send_speechsum_mail(speech)
+        return Response()
+
     @action(detail=True)
     def confirm(self, *args, **kwargs):
         try:
@@ -138,17 +145,4 @@ class SpeechViewSet(ModelViewSet):
         except Speech.DoesNotExist:
             raise NotFound("There is no speech with given id")
         speech.confirm()
-        return Response()
-
-    @action(detail=True)
-    def confirm(self, *args, **kwargs):
-        speech = self.get_queryset().get(pk=kwargs.get('pk'))
-        speech.confirm()
-        return Response()
-
-    @action(detail=False)
-    def send_mails(self, request, *args, **kwargs):
-        for speech in self.get_queryset():
-            send_speechsum_mail(speech)
-        # map(send_speechsum_mail, self.get_queryset())
         return Response()

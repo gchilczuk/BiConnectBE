@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet, ModelViewSet
 from rest_framework_extensions.mixins import DetailSerializerMixin
 
+from descriptor.models import Person, Meeting, Group, Speech, Requirement, Recommendation
 from descriptor.mailing import send_speechsum_mail
 from descriptor.models import Person, Meeting, Group, Speech, Requirement, Recommendation, BusinessDescription
 from descriptor.serializers import PersonSerializer, MeetingSerializer, GroupSerializer, MeetingDetailSerializer, \
@@ -123,6 +124,12 @@ class SpeechViewSet(ModelViewSet):
 
         speech.meeting.save()
         return Response(self.serializer_class(speech).data)
+
+    @action(detail=True)
+    def confirm(self, *args, **kwargs):
+        speech = self.get_queryset().get(pk=kwargs.get('pk'))
+        speech.confirm()
+        return Response()
 
     @action(detail=False)
     def send_mails(self, request, *args, **kwargs):

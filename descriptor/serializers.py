@@ -169,7 +169,8 @@ class SpeechSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Speech
-        fields = ('id', 'requirements', 'recommendations', 'person', 'date', 'sound_file', 'business_description')
+        fields = ('id', 'requirements', 'recommendations', 'person', 'date',
+                  'sound_file', 'business_description', 'confirmed')
         read_only_fields = ('id', 'date', 'confirmed')
 
     def save(self, speech):

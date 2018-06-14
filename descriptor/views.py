@@ -129,6 +129,9 @@ class SpeechViewSet(ModelViewSet):
 
     @action(detail=True)
     def confirm(self, *args, **kwargs):
-        speech = self.get_queryset().get(pk=kwargs.get('pk'))
+        try:
+            speech = self.get_queryset().get(pk=kwargs.get('pk'))
+        except Speech.DoesNotExist:
+            raise NotFound("There is no speech with given id")
         speech.confirm()
         return Response()

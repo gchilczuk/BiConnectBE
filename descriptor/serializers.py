@@ -2,6 +2,7 @@ import uuid
 
 from django.contrib.auth.models import User
 from django.db import IntegrityError
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from rest_framework.exceptions import ParseError, NotFound
 
@@ -174,7 +175,7 @@ class SpeechSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'date')
 
     def save(self, pk):
-        speech = self.Meta.model.objects.get(pk=pk)
+        speech = get_object_or_404(self.Meta.model.objects, pk=pk)
         try:
             speech.person = Person.objects.get(user__username=self.validated_data['person']['user']['username'])
         except Person.DoesNotExist:

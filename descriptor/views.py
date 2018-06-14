@@ -105,7 +105,7 @@ class SpeechViewSet(ModelViewSet):
                 and serializer_desc.is_valid(raise_exception=True)):
             with transaction.atomic():
                 try:
-                    serializer.save(speech_id)
+                    speech = serializer.save(speech_id)
                 except Speech.DoesNotExist:
                     raise NotFound("No such speech")
 

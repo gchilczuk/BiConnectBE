@@ -1,6 +1,5 @@
 from django.db import transaction
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
 from rest_framework import permissions
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
@@ -8,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet, ModelViewSet
 from rest_framework_extensions.mixins import DetailSerializerMixin
 
-from descriptor.models import Person, Meeting, Group, Speech, Requirement, Recommendation, BusinessDescription
+from descriptor.models import Person, Meeting, Group, Speech, Requirement, Recommendation
 from descriptor.serializers import PersonSerializer, MeetingSerializer, GroupSerializer, MeetingDetailSerializer, \
     SpeechSerializer, RequirementSerializer, RecommendationSerializer, SimplePersonSerializer, \
     BusinessDescriptionSerializer
@@ -38,7 +37,10 @@ class FastAddPersonViewSet(ViewSet):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data.copy()
-        data['group'] = get_object_or_404(Group, id=self.kwargs['parent_lookup_group'])
+        try:
+            data['group'] = Group.objects.get(id=self.kwargs['parent_lookup_group'])
+        except Group.DoesNotExist:
+            raise NotFound("There is no group with given id")
         result = serializer.create(data)
 
         return Response(self.serializer_class(result).data)
@@ -69,7 +71,7 @@ class MeetingViewSet(DetailSerializerMixin, ModelViewSet):
     @action(detail=True)
     def note(self, request, **kwargs):
         try:
-            meeting = get_object_or_404(self.get_queryset(), pk=kwargs.get('pk'))
+            meeting = self.get_queryset().get(pk=kwargs.get('pk'))
         except Meeting.DoesNotExist:
             raise NotFound('There is no meeting with such id in this group')
         note = Note(meeting)
@@ -93,7 +95,11 @@ class SpeechViewSet(ModelViewSet):
 
     def update(self, request, *args, **kwargs):
         speech_id = kwargs.get('pk')
-        speech = get_object_or_404(Speech, pk=speech_id)
+        try:
+            speech = Speech.objects.get(pk=speech_id)
+        except Speech.DoesNotExist:
+            raise NotFound("There is no speech with given id")
+
         serializer = self.serializer_class(data=request.data)
         serializer_req = RequirementSerializer(data=request.data.get('requirements'), many=True)
         serializer_rec = RecommendationSerializer(data=request.data.get('recommendations'), many=True)
@@ -104,10 +110,7 @@ class SpeechViewSet(ModelViewSet):
                 and serializer_req.is_valid(raise_exception=True)
                 and serializer_desc.is_valid(raise_exception=True)):
             with transaction.atomic():
-                try:
-                    speech = serializer.save(speech_id)
-                except Speech.DoesNotExist:
-                    raise NotFound("No such speech")
+                serializer.save(speech)
 
                 requirements = Requirement.objects.filter(speech_id=speech_id)
                 recommendations = Recommendation.objects.filter(speech_id=speech_id)

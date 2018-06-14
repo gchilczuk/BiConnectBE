@@ -1,8 +1,5 @@
-import uuid
-
 from django.contrib.auth.models import User
 from django.db import IntegrityError
-from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from rest_framework.exceptions import ParseError, NotFound
 
@@ -150,7 +147,6 @@ class RecommendationSerializer(serializers.ModelSerializer):
 
 
 class BusinessDescriptionSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = BusinessDescription
         fields = ('id', 'description')
@@ -163,6 +159,7 @@ class BusinessDescriptionSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+
 class SpeechSerializer(serializers.ModelSerializer):
     requirements = RequirementSerializer(many=True, read_only=True)
     recommendations = RecommendationSerializer(many=True, read_only=True)
@@ -174,8 +171,7 @@ class SpeechSerializer(serializers.ModelSerializer):
         fields = ('id', 'requirements', 'recommendations', 'person', 'date', 'sound_file', 'business_description')
         read_only_fields = ('id', 'date')
 
-    def save(self, pk):
-        speech = get_object_or_404(self.Meta.model.objects, pk=pk)
+    def save(self, speech):
         try:
             speech.person = Person.objects.get(user__username=self.validated_data['person']['user']['username'])
         except Person.DoesNotExist:

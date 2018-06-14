@@ -165,11 +165,12 @@ class SpeechSerializer(serializers.ModelSerializer):
     recommendations = RecommendationSerializer(many=True, read_only=True)
     person = SimplePersonSerializer()
     business_description = BusinessDescriptionSerializer()
+    confirmed = serializers.BooleanField()
 
     class Meta:
         model = Speech
         fields = ('id', 'requirements', 'recommendations', 'person', 'date', 'sound_file', 'business_description')
-        read_only_fields = ('id', 'date')
+        read_only_fields = ('id', 'date', 'confirmed')
 
     def save(self, speech):
         try:

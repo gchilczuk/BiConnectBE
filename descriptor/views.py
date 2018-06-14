@@ -1,5 +1,6 @@
 from django.db import transaction
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from rest_framework import permissions
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
@@ -37,7 +38,7 @@ class FastAddPersonViewSet(ViewSet):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data.copy()
-        data['group'] = Group.objects.get(id=self.kwargs['parent_lookup_group'])
+        data['group'] = get_object_or_404(Group, id=self.kwargs['parent_lookup_group'])
         result = serializer.create(data)
 
         return Response(self.serializer_class(result).data)
@@ -68,7 +69,7 @@ class MeetingViewSet(DetailSerializerMixin, ModelViewSet):
     @action(detail=True)
     def note(self, request, **kwargs):
         try:
-            meeting = self.get_queryset().get(pk=kwargs.get('pk'))
+            meeting = get_object_or_404(self.get_queryset(), pk=kwargs.get('pk'))
         except Meeting.DoesNotExist:
             raise NotFound('There is no meeting with such id in this group')
         note = Note(meeting)
@@ -92,7 +93,7 @@ class SpeechViewSet(ModelViewSet):
 
     def update(self, request, *args, **kwargs):
         speech_id = kwargs.get('pk')
-        speech = Speech.objects.get(pk=speech_id)
+        speech = get_object_or_404(Speech, pk=speech_id)
         serializer = self.serializer_class(data=request.data)
         serializer_req = RequirementSerializer(data=request.data.get('requirements'), many=True)
         serializer_rec = RecommendationSerializer(data=request.data.get('recommendations'), many=True)
@@ -119,7 +120,6 @@ class SpeechViewSet(ModelViewSet):
                 if business_description is None:
                     speech.business_description = bdesc
                 speech.save()
-
 
         speech.meeting.save()
         return Response(self.serializer_class(speech).data)

@@ -126,3 +126,12 @@ class SpeechViewSet(ModelViewSet):
 
         speech.meeting.save()
         return Response(self.serializer_class(speech).data)
+
+    @action(detail=True)
+    def confirm(self, *args, **kwargs):
+        try:
+            speech = self.get_queryset().get(pk=kwargs.get('pk'))
+        except Speech.DoesNotExist:
+            raise NotFound("There is no speech with given id")
+        speech.confirm()
+        return Response()

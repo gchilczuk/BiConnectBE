@@ -1,5 +1,3 @@
-import uuid
-
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from rest_framework import serializers
@@ -149,7 +147,6 @@ class RecommendationSerializer(serializers.ModelSerializer):
 
 
 class BusinessDescriptionSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = BusinessDescription
         fields = ('id', 'description')
@@ -162,19 +159,21 @@ class BusinessDescriptionSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+
 class SpeechSerializer(serializers.ModelSerializer):
     requirements = RequirementSerializer(many=True, read_only=True)
     recommendations = RecommendationSerializer(many=True, read_only=True)
     person = SimplePersonSerializer()
     business_description = BusinessDescriptionSerializer()
+    confirmed = serializers.BooleanField()
 
     class Meta:
         model = Speech
-        fields = ('id', 'requirements', 'recommendations', 'person', 'date', 'sound_file', 'business_description')
-        read_only_fields = ('id', 'date')
+        fields = ('id', 'requirements', 'recommendations', 'person', 'date',
+                  'sound_file', 'business_description', 'confirmed')
+        read_only_fields = ('id', 'date', 'confirmed')
 
-    def save(self, pk):
-        speech = self.Meta.model.objects.get(pk=pk)
+    def save(self, speech):
         try:
             speech.person = Person.objects.get(user__username=self.validated_data['person']['user']['username'])
         except Person.DoesNotExist:

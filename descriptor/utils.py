@@ -1,4 +1,5 @@
 import os
+
 from django.utils.datetime_safe import datetime
 
 from BiConnect.settings import STATIC_ROOT
@@ -23,14 +24,14 @@ def sound_file_path(instance, filename):
 
 
 class Note(object):
-
     def __init__(self, meeting):
         self.meeting = meeting
         self.dir = STATIC_ROOT + f'{self.meeting.group.city}_{self.meeting.group.id}/'
 
     def generate_json(self):
         speeches = []
-        for speech in self.meeting.speeches.get_queryset().prefetch_related('person', 'business_description', 'requirements', 'recommendations'):
+        for speech in self.meeting.speeches.get_queryset().prefetch_related('person', 'business_description',
+                                                                            'requirements', 'recommendations'):
             bussiness_desc = speech.business_description
             req_desc = speech.requirements.first()
             rec_desc = speech.recommendations.first()

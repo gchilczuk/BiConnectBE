@@ -67,6 +67,7 @@ class Person(models.Model):
     newsletter = models.BooleanField(default=True)
     speech_confirm = models.BooleanField(default=True)
 
+
     class Meta:
         db_table = 'people'
         ordering = ['id']

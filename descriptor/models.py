@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from rest_framework.exceptions import PermissionDenied
 
 from descriptor.utils import sound_file_path
 
@@ -50,6 +51,11 @@ class Speech(models.Model):
     def confirm(self):
         self.confirmed = True
         self.save()
+
+    def save(self, *args, **kwargs):
+        if self.confirmed:
+            raise PermissionDenied(detail="Confirmed speech cannot be modified", code=422)
+        super().save(*args, **kwargs)
 
 
 class Person(models.Model):

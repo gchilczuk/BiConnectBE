@@ -165,7 +165,7 @@ class SpeechSerializer(serializers.ModelSerializer):
     recommendations = RecommendationSerializer(many=True, read_only=True)
     person = SimplePersonSerializer()
     business_description = BusinessDescriptionSerializer()
-    confirmed = serializers.BooleanField()
+    confirmed = serializers.BooleanField(required=False)
 
     class Meta:
         model = Speech

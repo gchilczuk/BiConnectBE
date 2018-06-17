@@ -35,7 +35,6 @@ class BusinessDescription(models.Model):
         return f'Opis działalności: \n {self.description}'
 
 
-
 class Speech(models.Model):
     person = models.ForeignKey(to='Person', on_delete=models.CASCADE, related_name='speeches',
                                related_query_name='speech', null=True)
@@ -94,7 +93,6 @@ class Requirement(models.Model):
 
     def __str__(self):
         return f'Potrzeba: \n {self.description}'
-
 
 
 class Recommendation(models.Model):

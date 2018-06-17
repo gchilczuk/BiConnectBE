@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import IntegrityError
-from rest_framework import serializers
+from rest_framework import serializers, status
 from rest_framework.exceptions import ParseError, NotFound, PermissionDenied
 
 from .models import Person, Requirement, Meeting, Speech, Recommendation, Group, Category, BusinessDescription
@@ -175,7 +175,7 @@ class SpeechSerializer(serializers.ModelSerializer):
 
     def save(self, speech):
         if speech.confirmed:
-            raise PermissionDenied(detail="Confirmed speech cannot be modified", code=422)
+            raise PermissionDenied(detail="Confirmed speech cannot be modified", code=status.HTTP_423_LOCKED)
         try:
             speech.person = Person.objects.get(user__username=self.validated_data['person']['user']['username'])
         except Person.DoesNotExist:

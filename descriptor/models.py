@@ -29,7 +29,11 @@ class Meeting(models.Model):
 
 
 class BusinessDescription(models.Model):
-    description = models.TextField()
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return f'Opis działalności: \n {self.description}'
+
 
 
 class Speech(models.Model):
@@ -46,6 +50,9 @@ class Speech(models.Model):
     class Meta:
         db_table = 'speeches'
         ordering = ['-id']
+
+    def __str__(self):
+        return f'{self.business_description}\n\n {self.requirements.first()}\n\n {self.recommendations.first()}'
 
     def confirm(self):
         self.confirmed = True
@@ -64,6 +71,10 @@ class Person(models.Model):
         db_table = 'people'
         ordering = ['id']
 
+    @property
+    def email(self):
+        return self.user.email
+
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}, {self.user.email}'
 
@@ -81,6 +92,10 @@ class Requirement(models.Model):
         db_table = 'requirements'
         ordering = ['id']
 
+    def __str__(self):
+        return f'Potrzeba: \n {self.description}'
+
+
 
 class Recommendation(models.Model):
     speech = models.ForeignKey(to=Speech, on_delete=models.CASCADE, related_name='recommendations',
@@ -93,6 +108,9 @@ class Recommendation(models.Model):
     class Meta:
         db_table = 'recommendation'
         ordering = ['id']
+
+    def __str__(self):
+        return f'Rekomendacja: \n {self.description}'
 
 
 class Category(models.Model):

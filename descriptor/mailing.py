@@ -4,7 +4,7 @@ from BiConnect import settings
 
 
 def prepare_address(speech):
-    return f'http://localhost:3000/?m={speech.meeting_id}&s={speech.id}'
+    return f'http://localhost:3000/member-form?m={speech.meeting_id}&s={speech.id}'
 
 
 def prepare_mail_body(speech):

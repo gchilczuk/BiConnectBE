@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User
 from django.db import models
-from rest_framework.exceptions import PermissionDenied
 
 from descriptor.utils import sound_file_path
 
@@ -36,7 +35,6 @@ class BusinessDescription(models.Model):
         return f'Opis działalności: \n {self.description}'
 
 
-
 class Speech(models.Model):
     person = models.ForeignKey(to='Person', on_delete=models.CASCADE, related_name='speeches',
                                related_query_name='speech', null=True)
@@ -58,11 +56,6 @@ class Speech(models.Model):
     def confirm(self):
         self.confirmed = True
         self.save()
-
-    def save(self, *args, **kwargs):
-        if self.confirmed:
-            raise PermissionDenied(detail="Confirmed speech cannot be modified", code=422)
-        super().save(*args, **kwargs)
 
 
 class Person(models.Model):
@@ -100,7 +93,6 @@ class Requirement(models.Model):
 
     def __str__(self):
         return f'Potrzeba: \n {self.description}'
-
 
 
 class Recommendation(models.Model):

@@ -1,5 +1,22 @@
 # BiConnect Backend
-### I sposób (manualny)
+
+> Aplikacja wspierająca towarzystwo biznesowe.
+
+Aplikacja backendowa dostarczająca REST Api do zarządzania spotkaniami Towarzystwa Biznesowego.
+
+Panel użytkownika jest dostarczany przez [BiConnectFE](https://github.com/gchilczuk/BiConnectFE)
+
+### Instrukcja obsługi
+
+Spis endpointów widoczny po uruchomieniu aplikacji pod adresem `localhost:8000/swag`
+
+### Technologie
+
+[Django](https://www.djangoproject.com/) + [Django Rest Framework](http://www.django-rest-framework.org/)
+
+Szczegółowy spis znajduje się w pliku `requirements.txt`
+
+### Build Setup
 Aby uruchomić serwer lokalnie 
 1. Utwórz virtualne środowisko z Pythonem 3.6.4
 2. Zainstaluj w nim zależności `pip install -r requirements.txt`
@@ -27,5 +44,5 @@ python manage.py runserver
 ```
 serwer będzie dostępny pod adresem: `localhost:8000`
 
-### II sposób (zautomatyzowany) - na Windowsie nie działa
-Uruchom cały projekt zgodnie z instrukcją w https://github.com/gchilczuk/BiConnect
+##### sposób alternatywny - wersja niestabilna
+Uruchom cały projekt zgodnie z instrukcją w [BiConnect Docker](https://github.com/gchilczuk/BiConnect)
